@@ -92,7 +92,7 @@
 </head>
 
 <body style="font-size: 60px;">
-    <div class="modal fade" role="dialog" tabindex="-1" id="item-modal">
+    <div class="modal fade" role="dialog" tabindex="-1" id="itemModal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -121,7 +121,7 @@
                         <div class="col"><input type="text" id="itemDescription"></div>
                     </div>
                 </div>
-                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" id="itemSaveButton">Save</button><button class="btn btn-secondary" type="button" id="itemDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal" id="itemSaveButton">Save</button><button class="btn btn-secondary" type="button" id="itemDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
                         <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span class="d-xl-flex justify-content-xl-start" style="font-size: 30px;">Capacity:&nbsp;</span><input class="form-control-sm" type="number" id="animalCapacity"></div>
                     </div>
                 </div>
-                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" id="animalSaveButton">Save</button><button class="btn btn-secondary" type="button" id="animalDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal" id="animalSaveButton">Save</button><button class="btn btn-secondary" type="button" id="animalDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
             </div>
         </div>
     </div>
@@ -203,7 +203,7 @@
                                         <td class="bg-info bg-opacity-25">3</td>
                                     </tr>
                                     <tr class="bg-info bg-opacity-25">
-                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
                                         <td class="bg-info bg-opacity-25"></td>
                                     </tr>
                                 </tbody>
@@ -232,7 +232,7 @@
                                     </tr>
                                     <tr class="bg-info bg-opacity-25"></tr>
                                     <tr class="bg-info bg-opacity-25">
-                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
                                         <td class="bg-info bg-opacity-25"></td>
                                     </tr>
                                 </tbody>
@@ -242,7 +242,7 @@
                 </div>
             </div>
             <div class="col" id="animalColumn"><span style="font-size: 30px;">Animals</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#animal-modal" style="margin-left: 25px;">New</button>
-                <div class="card bg-secondary">
+                <div class="card bg-secondary mx-auto mb-2">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xl-8">
@@ -270,7 +270,7 @@
                                         <td class="bg-info bg-opacity-25">5</td>
                                     </tr>
                                     <tr class="bg-info bg-opacity-25">
-                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
                                         <td class="bg-info bg-opacity-25"></td>
                                     </tr>
                                 </tbody>
@@ -299,7 +299,7 @@
                                     </tr>
                                     <tr class="bg-info bg-opacity-25"></tr>
                                     <tr class="bg-info bg-opacity-25">
-                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
                                         <td class="bg-info bg-opacity-25"></td>
                                     </tr>
                                 </tbody>
@@ -330,7 +330,7 @@
                                         <td class="bg-info bg-opacity-25">3</td>
                                     </tr>
                                     <tr class="bg-info bg-opacity-25">
-                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
                                         <td class="bg-info bg-opacity-25"></td>
                                     </tr>
                                 </tbody>
@@ -456,6 +456,10 @@
             const td1 = document.createElement('td');
             td1.classList.add('bg-info', 'bg-opacity-25');
             td1.innerText = '+';
+            td1.addEventListener('click', function() {
+                const itemModal = new bootstrap.Modal(document.getElementById('itemModal'));
+                itemModal.show();
+            });
             const td2 = document.createElement('td');
             td2.classList.add('bg-info', 'bg-opacity-25');
             bodyRow.appendChild(td1);
