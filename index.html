@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Quartermaster</title>
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="assets/css/Footer-Basic-icons.css">
+</head>
+
+<body style="font-size: 60px;">
+    <div class="modal fade" role="dialog" tabindex="-1" id="item-modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row d-xl-flex justify-content-xl-start align-items-xl-start">
+                        <div class="col-xl-12">
+                            <h4 class="modal-title" style="font-size: 30px;">New Item&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 d-xl-flex justify-content-xl-end align-items-xl-center"><span class="d-xl-flex justify-content-xl-start" style="font-size: 30px;">Item Template</span>
+                        <form><select class="form-select">
+                                <optgroup label="This is a group">
+                                    <option value="12" selected="">(None)</option>
+                                    <option value="13">This is item 2</option>
+                                    <option value="14">This is item 3</option>
+                                </optgroup>
+                            </select></form>
+                    </div><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal" style="width: 15px;height: 15px;"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span style="font-size: 30px;">Name:&nbsp;</span><input class="form-control-sm mb-0 pb-1" type="text" id="itemName"></div>
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span class="d-xl-flex justify-content-xl-start" style="font-size: 30px;">Size:&nbsp;</span><input class="form-control-sm" type="number" id="itemSize"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-xl-flex justify-content-xl-start"><span style="font-size: 30px;">Description:</span></div>
+                        <div class="col"><input type="text" id="itemDescription"></div>
+                    </div>
+                </div>
+                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" id="itemSaveButton">Save</button><button class="btn btn-secondary" type="button" id="itemDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="character-modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row d-xl-flex justify-content-xl-start align-items-xl-start">
+                        <div class="col-xl-12">
+                            <h4 class="modal-title" style="font-size: 30px;">Character</h4>
+                        </div>
+                    </div><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal" style="width: 15px;height: 15px;"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span style="font-size: 30px;">Name:&nbsp;</span><label
+                                for="characterName"></label><input class="form-control-sm mb-0 pb-1" type="text" id="characterName"></div>
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span class="d-xl-flex justify-content-xl-start" style="font-size: 30px;">Capacity:&nbsp;</span><input class="form-control-sm" type="number" id="characterCapacity"></div>
+                    </div>
+                </div>
+                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal" id="characterSaveButton">Save</button><button class="btn btn-secondary" type="button" id="characterDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="animal-modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row d-xl-flex justify-content-xl-start align-items-xl-start">
+                        <div class="col-xl-12">
+                            <h4 class="modal-title" style="font-size: 30px;">Animal</h4>
+                        </div>
+                    </div><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal" style="width: 15px;height: 15px;"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span style="font-size: 30px;">Name:&nbsp;</span><label
+                                for="animalName"></label><input class="form-control-sm mb-0 pb-1" type="text" id="animalName"></div>
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center"><span class="d-xl-flex justify-content-xl-start" style="font-size: 30px;">Capacity:&nbsp;</span><input class="form-control-sm" type="number" id="animalCapacity"></div>
+                    </div>
+                </div>
+                <div class="modal-footer d-xl-flex justify-content-xl-center"><button class="btn btn-secondary" type="button" id="animalSaveButton">Save</button><button class="btn btn-secondary" type="button" id="animalDeleteButton">Delete</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center text-danger" style="margin-bottom: -1px;font-weight: bold;font-style: italic;text-decoration:  underline;">Quartermaster</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" id="characterColumn"><span style="font-size: 30px;">Characters</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#character-modal" style="margin-left: 25px;">New</button>
+                <div class="card bg-secondary mx-auto mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <h2>Character 1</h2>
+                            </div>
+                            <div class="col-xl-4">
+                                <h2>(6/8)</h2>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-info bg-opacity-25">Item</th>
+                                        <th class="bg-info bg-opacity-25">Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-info bg-opacity-25">
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Clothes</td>
+                                        <td class="bg-info bg-opacity-25">3</td>
+                                    </tr>
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Backpack</td>
+                                        <td class="bg-info bg-opacity-25">3</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <h2>Backpack</h2>
+                            </div>
+                            <div class="col-xl-4">
+                                <h2>(3/5)</h2>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-info bg-opacity-25">Item</th>
+                                        <th class="bg-info bg-opacity-25">Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-info bg-opacity-25">
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Blade</td>
+                                        <td class="bg-info bg-opacity-25">3</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25"></tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col" id="animalColumn"><span style="font-size: 30px;">Animals</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#animal-modal" style="margin-left: 25px;">New</button>
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <h2>Animal 1</h2>
+                            </div>
+                            <div class="col-xl-4">
+                                <h2>(8/15)</h2>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-info bg-opacity-25">Item</th>
+                                        <th class="bg-info bg-opacity-25">Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-info bg-opacity-25">
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Ration (x3)</td>
+                                        <td class="bg-info bg-opacity-25">3</td>
+                                    </tr>
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Chest</td>
+                                        <td class="bg-info bg-opacity-25">5</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <h2>Chest</h2>
+                            </div>
+                            <div class="col-xl-5">
+                                <h2>(15/15)</h2>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-info bg-opacity-25">Item</th>
+                                        <th class="bg-info bg-opacity-25">Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-info bg-opacity-25">
+                                    <tr draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Ration (x15)</td>
+                                        <td class="bg-info bg-opacity-25">15</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25"></tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col"><span style="font-size: 30px;">Toolbox</span>
+                <div class="card bg-secondary" style="position: relative;">
+                    <div class="card-body">
+                        <h2>Magic Box</h2>
+                        <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-info bg-opacity-25">Item</th>
+                                        <th class="bg-info bg-opacity-25">Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-info bg-opacity-25">
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Ration</td>
+                                        <td class="bg-info bg-opacity-25">1</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">Clothes</td>
+                                        <td class="bg-info bg-opacity-25">3</td>
+                                    </tr>
+                                    <tr class="bg-info bg-opacity-25">
+                                        <td class="bg-info bg-opacity-25">+</td>
+                                        <td class="bg-info bg-opacity-25"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4>Gold:<input type="text" placeholder="amount" value="1,572">&nbsp;</h4>
+                        <h4>EXP:<input type="text" placeholder="amount" value="350">&nbsp;</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="w-100"></div>
+        </div>
+    </div>
+    <footer class="d-xl-flex justify-content-xl-center align-items-xl-end">
+        <div class="row d-xl-flex flex-fill justify-content-xl-center align-items-xl-end">
+            <div class="col-sm-2 col-xl-1 d-xl-flex justify-content-xl-start align-items-xl-end">
+                <div class="theme-switcher dropup d-flex justify-content-start align-items-center"><button class="btn btn-link dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="color: var(--bs-body-color);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill mb-1">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                        </svg></button>
+                    <div class="dropdown-menu"><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="light"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill opacity-50 me-2">
+                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                            </svg>Light</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="dark"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-moon-stars-fill opacity-50 me-2">
+                                <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278"></path>
+                                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+                            </svg>Dark</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-half opacity-50 me-2">
+                                <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"></path>
+                            </svg>Auto</a></div>
+                </div>
+            </div>
+            <div class="col-xl-3 text-center d-flex d-lg-flex justify-content-center align-items-center justify-content-lg-center align-items-lg-center align-items-xl-end"><button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;">Import...</button><button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;">Export...</button></div>
+            <div class="col-xl-2 d-flex d-lg-flex justify-content-center align-items-center align-items-lg-center align-items-xl-end" style="text-align: center;"><a class="d-lg-flex justify-content-lg-center align-items-lg-center" href="Ko-fi.com/bizentine" style="font-size: 15px;">Ko-fi.com/bizentine</a></div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <script>
+        //Drag and Drop
+        let draggedRow = null;
+
+        function drag(event) {
+            draggedRow = event.target;
+            draggedRow.classList.add("dragging"); // Add a class to style the dragged row
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            let dropTarget = event.target;
+            while (dropTarget && dropTarget.tagName.toLowerCase() !== "tr") {
+                dropTarget = dropTarget.parentNode;
+            }
+            if (dropTarget && dropTarget !== draggedRow) {
+                const rows = Array.from(document.querySelector("tbody").rows);
+                const draggedIndex = rows.indexOf(draggedRow);
+                const dropTargetIndex = rows.indexOf(dropTarget);
+
+                if (draggedIndex < dropTargetIndex) {
+                    dropTarget.after(draggedRow);
+                } else {
+                    dropTarget.before(draggedRow);
+                }
+            }
+            draggedRow.classList.remove("dragging");
+        }
+    </script>
+
+    <script>
+        document.getElementById('characterSaveButton').addEventListener('click', function() {
+            const card = document.createElement('div');
+            card.classList.add('card', 'bg-secondary', 'mx-auto', 'mb-2');
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            const row = document.createElement('div');
+            row.classList.add('row');
+
+            const col1 = document.createElement('div');
+            col1.classList.add('col-xl-8');
+            const h2_1 = document.createElement('h2');
+            h2_1.innerText = document.getElementById('characterName').value;
+            col1.appendChild(h2_1);
+
+            const col2 = document.createElement('div');
+            col2.classList.add('col-xl-4');
+            const h2_2 = document.createElement('h2');
+            //change to autotabulate
+            h2_2.innerText = '(6/8)';
+            col2.appendChild(h2_2);
+            row.appendChild(col1);
+            row.appendChild(col2);
+            cardBody.appendChild(row);
+
+            const tableContainer = document.createElement('div');
+            tableContainer.classList.add('table-responsive', 'mb-0', 'pb-0');
+            tableContainer.style.fontSize = '20px';
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-hover');
+            table.setAttribute('ondragover', 'allowDrop(event)');
+            table.setAttribute('ondrop', 'drop(event)');
+
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            const th1 = document.createElement('th');
+            th1.classList.add('bg-info', 'bg-opacity-25');
+            th1.innerText = 'Item';
+            const th2 = document.createElement('th');
+            th2.classList.add('bg-info', 'bg-opacity-25');
+            th2.innerText = 'Size';
+            headRow.appendChild(th1);
+            headRow.appendChild(th2);
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            const bodyRow = document.createElement('tr');
+            bodyRow.classList.add('bg-info', 'bg-opacity-25');
+            const td1 = document.createElement('td');
+            td1.classList.add('bg-info', 'bg-opacity-25');
+            td1.innerText = '+';
+            const td2 = document.createElement('td');
+            td2.classList.add('bg-info', 'bg-opacity-25');
+            bodyRow.appendChild(td1);
+            bodyRow.appendChild(td2);
+            tbody.appendChild(bodyRow);
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+            cardBody.appendChild(tableContainer);
+            card.appendChild(cardBody);
+            document.getElementById('characterColumn').appendChild(card);
+        });
+    </script>
+
+    <script>
+        document.getElementById('animalSaveButton').addEventListener('click', function() {
+            const card = document.createElement('div');
+            card.classList.add('card', 'bg-secondary', 'mx-auto', 'mb-2');
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            const row = document.createElement('div');
+            row.classList.add('row');
+
+            const col1 = document.createElement('div');
+            col1.classList.add('col-xl-8');
+            const h2_1 = document.createElement('h2');
+            h2_1.innerText = document.getElementById('animalName').value;
+            col1.appendChild(h2_1);
+
+            const col2 = document.createElement('div');
+            col2.classList.add('col-xl-4');
+            const h2_2 = document.createElement('h2');
+            //change to autotabulate
+            h2_2.innerText = '(6/8)';
+            col2.appendChild(h2_2);
+            row.appendChild(col1);
+            row.appendChild(col2);
+            cardBody.appendChild(row);
+
+            const tableContainer = document.createElement('div');
+            tableContainer.classList.add('table-responsive', 'mb-0', 'pb-0');
+            tableContainer.style.fontSize = '20px';
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-hover');
+            table.setAttribute('ondragover', 'allowDrop(event)');
+            table.setAttribute('ondrop', 'drop(event)');
+
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            const th1 = document.createElement('th');
+            th1.classList.add('bg-info', 'bg-opacity-25');
+            th1.innerText = 'Item';
+            const th2 = document.createElement('th');
+            th2.classList.add('bg-info', 'bg-opacity-25');
+            th2.innerText = 'Size';
+            headRow.appendChild(th1);
+            headRow.appendChild(th2);
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            const bodyRow = document.createElement('tr');
+            bodyRow.classList.add('bg-info', 'bg-opacity-25');
+            const td1 = document.createElement('td');
+            td1.classList.add('bg-info', 'bg-opacity-25');
+            td1.innerText = '+';
+            const td2 = document.createElement('td');
+            td2.classList.add('bg-info', 'bg-opacity-25');
+            bodyRow.appendChild(td1);
+            bodyRow.appendChild(td2);
+            tbody.appendChild(bodyRow);
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+            cardBody.appendChild(tableContainer);
+            card.appendChild(cardBody);
+            document.getElementById('animalColumn').appendChild(card);
+        });
+    </script>
+
+</body>
+
+</html>
