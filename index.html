@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -176,19 +175,19 @@
         <div class="row">
             <div class="col" id="characterColumn"><span style="font-size: 30px;">Characters</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#character-modal" style="margin-left: 25px;">New</button>
                 <div class="card bg-secondary mx-auto mb-2">
-                    <div class="card-body">
+                    <div class="card-body table-container">
                         <div class="row">
-                            <div class="col-xl-8">
+                            <div class="col-xl-8" >
                                 <h2>Character 1</h2>
                             </div>
                             <div class="col-xl-4">
-                                <h2>(6/8)</h2>
+                                <h2 class="total-size">(0/0)</h2>
                             </div>
                         </div>
                         <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                            <table data-capacity="8" ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
                                 <thead>
-                                    <tr>
+                                    <tr >
                                         <th class="bg-info bg-opacity-25">Item</th>
                                         <th class="bg-info bg-opacity-25">Size</th>
                                     </tr>
@@ -214,11 +213,11 @@
                                 <h2>Backpack</h2>
                             </div>
                             <div class="col-xl-4">
-                                <h2>(3/5)</h2>
+                                <h2 class="total-size">(0/0)</h2>
                             </div>
                         </div>
                         <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                            <table data-capacity="5" ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th class="bg-info bg-opacity-25">Item</th>
@@ -243,17 +242,17 @@
             </div>
             <div class="col" id="animalColumn"><span style="font-size: 30px;">Animals</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#animal-modal" style="margin-left: 25px;">New</button>
                 <div class="card bg-secondary mx-auto mb-2">
-                    <div class="card-body">
+                    <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8">
                                 <h2>Animal 1</h2>
                             </div>
                             <div class="col-xl-4">
-                                <h2>(8/15)</h2>
+                                <h2 class="total-size">(0/0)</h2>
                             </div>
                         </div>
                         <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                            <table data-capacity="15" ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th class="bg-info bg-opacity-25">Item</th>
@@ -281,11 +280,11 @@
                                 <h2>Chest</h2>
                             </div>
                             <div class="col-xl-5">
-                                <h2>(15/15)</h2>
+                                <h2 class="total-size">(0/0)</h2>
                             </div>
                         </div>
                         <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-                            <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
+                            <table data-capacity="15" ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th class="bg-info bg-opacity-25">Item</th>
@@ -383,22 +382,76 @@
         function drop(event) {
             event.preventDefault();
             let dropTarget = event.target;
+
+            // Ensure the drop target is a table row (or a cell within a row)
             while (dropTarget && dropTarget.tagName.toLowerCase() !== "tr") {
                 dropTarget = dropTarget.parentNode;
             }
-            if (dropTarget && dropTarget !== draggedRow) {
-                const rows = Array.from(document.querySelector("tbody").rows);
-                const draggedIndex = rows.indexOf(draggedRow);
-                const dropTargetIndex = rows.indexOf(dropTarget);
 
-                if (draggedIndex < dropTargetIndex) {
-                    dropTarget.after(draggedRow);
-                } else {
-                    dropTarget.before(draggedRow);
+            if (dropTarget && dropTarget !== draggedRow) {
+                // Find the specific table and tbody that the drop is happening in
+                const table = dropTarget.closest("table");
+                const tableBody = table.querySelector("tbody");
+                const header = table.querySelector("thead");
+                const lastRow = tableBody.lastElementChild;
+
+                // If the drop target is on the header or in the empty space above the table body
+                if (dropTarget === header || dropTarget === tableBody || !dropTarget.closest("tbody")) {
+                    tableBody.prepend(draggedRow); // Move the row just below the header
                 }
+                // If the drop target is the last row, move the dragged row above it
+                else if (dropTarget === lastRow || !dropTarget.nextElementSibling) {
+                    tableBody.insertBefore(draggedRow, lastRow); // Insert above the last row
+                } else {
+                    // Normal row repositioning between valid rows
+                    const rows = Array.from(tableBody.rows);
+                    const draggedIndex = rows.indexOf(draggedRow);
+                    const dropTargetIndex = rows.indexOf(dropTarget);
+
+                    if (draggedIndex < dropTargetIndex) {
+                        dropTarget.after(draggedRow);
+                    } else {
+                        dropTarget.before(draggedRow);
+                    }
+                }
+                updateTotalSize(draggedRow.closest('table')); // Update the table from which the row was dragged
+                updateTotalSize(table); // Update the table where the row was dropped
             }
             draggedRow.classList.remove("dragging");
         }
+        // Function to calculate and update the total size for each table
+        function updateTotalSize(table) {
+            const tableBody = table.querySelector("tbody");
+            const rows = Array.from(tableBody.rows);
+            let totalSize = 0;
+
+            // Get the capacity for the current table from the data attribute
+            const capacity = parseInt(table.getAttribute("data-capacity")) || 100; // Default to 100 if no capacity is set
+
+            // Loop through each row and sum up the size (second column)
+            rows.forEach(row => {
+                const sizeCell = row.cells[1]; // Assuming the size is in the second column (index 1)
+                const size = parseInt(sizeCell.textContent) || 0; // Parse size as integer, default to 0 if invalid
+                totalSize += size;
+            });
+
+            // Find the parent container of the table and its total-size display
+            const tableContainer = table.closest('.table-container'); // Get the parent div with class "table-container"
+            const totalSizeElement = tableContainer.querySelector('.total-size'); // Find the .total-size div for this table
+
+            if (totalSizeElement) {
+                // Update the total size as a fraction (totalSize/capacity)
+                totalSizeElement.textContent = `(${totalSize}/${capacity})`; // Use the requested format
+            }
+        }
+
+        // Initial setup to calculate the total size for each table on page load
+        document.querySelectorAll(".table-container").forEach(container => {
+            const tables = container.querySelectorAll("table");
+            tables.forEach(table => {
+                updateTotalSize(table); // Update total size when the page loads
+            });
+        });
     </script>
 
     <script>
@@ -407,7 +460,7 @@
             card.classList.add('card', 'bg-secondary', 'mx-auto', 'mb-2');
 
             const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
+            cardBody.classList.add('card-body', 'table-container');
 
             const row = document.createElement('div');
             row.classList.add('row');
@@ -421,8 +474,9 @@
             const col2 = document.createElement('div');
             col2.classList.add('col-xl-4');
             const h2_2 = document.createElement('h2');
-            //change to autotabulate
-            h2_2.innerText = '(6/8)';
+            h2_2.classList.add('total-size')
+            const capacity = document.getElementById('characterCapacity').value
+            h2_2.innerText = `(0/${capacity})`;
             col2.appendChild(h2_2);
             row.appendChild(col1);
             row.appendChild(col2);
@@ -436,6 +490,7 @@
             table.classList.add('table', 'table-hover');
             table.setAttribute('ondragover', 'allowDrop(event)');
             table.setAttribute('ondrop', 'drop(event)');
+            table.setAttribute('data-capacity', capacity)
 
             const thead = document.createElement('thead');
             const headRow = document.createElement('tr');
@@ -491,10 +546,10 @@
             col1.appendChild(h2_1);
 
             const col2 = document.createElement('div');
-            col2.classList.add('col-xl-4');
+            col2.classList.add('col-xl-4', 'total-size');
             const h2_2 = document.createElement('h2');
-            //change to autotabulate
-            h2_2.innerText = '(6/8)';
+            const capacity = document.getElementById('characterCapacity').value
+            h2_2.innerText = `(0/${capacity})`;
             col2.appendChild(h2_2);
             row.appendChild(col1);
             row.appendChild(col2);
@@ -508,6 +563,7 @@
             table.classList.add('table', 'table-hover');
             table.setAttribute('ondragover', 'allowDrop(event)');
             table.setAttribute('ondrop', 'drop(event)');
+            table.setAttribute('data-capacity', capacity)
 
             const thead = document.createElement('thead');
             const headRow = document.createElement('tr');
