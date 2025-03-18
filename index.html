@@ -383,27 +383,22 @@
             event.preventDefault();
             let dropTarget = event.target;
 
-            // Ensure the drop target is a table row (or a cell within a row)
             while (dropTarget && dropTarget.tagName.toLowerCase() !== "tr") {
                 dropTarget = dropTarget.parentNode;
             }
 
             if (dropTarget && dropTarget !== draggedRow) {
-                // Find the specific table and tbody that the drop is happening in
                 const table = dropTarget.closest("table");
                 const tableBody = table.querySelector("tbody");
                 const header = table.querySelector("thead");
                 const lastRow = tableBody.lastElementChild;
 
-                // If the drop target is on the header or in the empty space above the table body
                 if (dropTarget === header || dropTarget === tableBody || !dropTarget.closest("tbody")) {
-                    tableBody.prepend(draggedRow); // Move the row just below the header
+                    tableBody.prepend(draggedRow);
                 }
-                // If the drop target is the last row, move the dragged row above it
                 else if (dropTarget === lastRow || !dropTarget.nextElementSibling) {
-                    tableBody.insertBefore(draggedRow, lastRow); // Insert above the last row
+                    tableBody.insertBefore(draggedRow, lastRow);
                 } else {
-                    // Normal row repositioning between valid rows
                     const rows = Array.from(tableBody.rows);
                     const draggedIndex = rows.indexOf(draggedRow);
                     const dropTargetIndex = rows.indexOf(dropTarget);
@@ -414,42 +409,38 @@
                         dropTarget.before(draggedRow);
                     }
                 }
-                updateTotalSize(draggedRow.closest('table')); // Update the table from which the row was dragged
-                updateTotalSize(table); // Update the table where the row was dropped
+                updateTotalSize(draggedRow.closest('table'));
+                updateTotalSize(table);
             }
             draggedRow.classList.remove("dragging");
         }
-        // Function to calculate and update the total size for each table
+
         function updateTotalSize(table) {
             const tableBody = table.querySelector("tbody");
             const rows = Array.from(tableBody.rows);
             let totalSize = 0;
 
-            // Get the capacity for the current table from the data attribute
-            const capacity = parseInt(table.getAttribute("data-capacity")) || 100; // Default to 100 if no capacity is set
+            const capacity = parseInt(table.getAttribute("data-capacity")) || 34404;
 
-            // Loop through each row and sum up the size (second column)
             rows.forEach(row => {
-                const sizeCell = row.cells[1]; // Assuming the size is in the second column (index 1)
-                const size = parseInt(sizeCell.textContent) || 0; // Parse size as integer, default to 0 if invalid
+                const sizeCell = row.cells[1];
+                const size = parseInt(sizeCell.textContent) || 0;
                 totalSize += size;
             });
 
-            // Find the parent container of the table and its total-size display
-            const tableContainer = table.closest('.table-container'); // Get the parent div with class "table-container"
-            const totalSizeElement = tableContainer.querySelector('.total-size'); // Find the .total-size div for this table
+
+            const tableContainer = table.closest('.table-container');
+            const totalSizeElement = tableContainer.querySelector('.total-size');
 
             if (totalSizeElement) {
-                // Update the total size as a fraction (totalSize/capacity)
-                totalSizeElement.textContent = `(${totalSize}/${capacity})`; // Use the requested format
+                totalSizeElement.textContent = `(${totalSize}/${capacity})`;
             }
         }
 
-        // Initial setup to calculate the total size for each table on page load
         document.querySelectorAll(".table-container").forEach(container => {
             const tables = container.querySelectorAll("table");
             tables.forEach(table => {
-                updateTotalSize(table); // Update total size when the page loads
+                updateTotalSize(table);
             });
         });
     </script>
