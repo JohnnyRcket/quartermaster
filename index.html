@@ -174,7 +174,7 @@
         </div>
         <div class="row">
             <div class="col" id="characterColumn"><span style="font-size: 30px;">Characters</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#character-modal" style="margin-left: 25px;">New</button>
-                <div class="card bg-secondary mx-auto mb-2">
+                <div class="card bg-secondary mx-auto">
                     <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8" >
@@ -208,6 +208,8 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8">
                                 <h2>Backpack</h2>
@@ -241,7 +243,7 @@
                 </div>
             </div>
             <div class="col" id="animalColumn"><span style="font-size: 30px;">Animals</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#animal-modal" style="margin-left: 25px;">New</button>
-                <div class="card bg-secondary mx-auto mb-2">
+                <div class="card bg-secondary mx-auto">
                     <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8">
@@ -275,6 +277,8 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-7">
                                 <h2>Chest</h2>
@@ -388,18 +392,20 @@
             }
 
             if (dropTarget && dropTarget !== draggedRow) {
-                const table = dropTarget.closest("table");
-                const tableBody = table.querySelector("tbody");
-                const header = table.querySelector("thead");
-                const lastRow = tableBody.lastElementChild;
+                const sourceTable = draggedRow.closest("table");
+                const targetTable = dropTarget.closest("table");
 
-                if (dropTarget === header || dropTarget === tableBody || !dropTarget.closest("tbody")) {
-                    tableBody.prepend(draggedRow);
-                }
-                else if (dropTarget === lastRow || !dropTarget.nextElementSibling) {
-                    tableBody.insertBefore(draggedRow, lastRow);
+                const sourceTableBody = sourceTable.querySelector("tbody");
+                const targetTableBody = targetTable.querySelector("tbody");
+
+                sourceTableBody.removeChild(draggedRow);
+
+                const rows = Array.from(targetTableBody.rows);
+                const lastRow = targetTableBody.lastElementChild;
+
+                if (dropTarget === lastRow || !dropTarget.nextElementSibling) {
+                    targetTableBody.appendChild(draggedRow);
                 } else {
-                    const rows = Array.from(tableBody.rows);
                     const draggedIndex = rows.indexOf(draggedRow);
                     const dropTargetIndex = rows.indexOf(dropTarget);
 
@@ -409,9 +415,11 @@
                         dropTarget.before(draggedRow);
                     }
                 }
-                updateTotalSize(draggedRow.closest('table'));
-                updateTotalSize(table);
+
+                updateTotalSize(sourceTable);
+                updateTotalSize(targetTable);
             }
+
             draggedRow.classList.remove("dragging");
         }
 
