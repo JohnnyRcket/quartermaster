@@ -174,7 +174,7 @@
         </div>
         <div class="row">
             <div class="col" id="characterColumn"><span style="font-size: 30px;">Characters</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#character-modal" style="margin-left: 25px;">New</button>
-                <div class="card bg-secondary mx-auto">
+                <div class="card bg-secondary mx-auto mb-2">
                     <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8" >
@@ -243,7 +243,7 @@
                 </div>
             </div>
             <div class="col" id="animalColumn"><span style="font-size: 30px;">Animals</span><button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#animal-modal" style="margin-left: 25px;">New</button>
-                <div class="card bg-secondary mx-auto">
+                <div class="card bg-secondary mx-auto mb-2">
                     <div class="card-body table-container">
                         <div class="row">
                             <div class="col-xl-8">
@@ -404,7 +404,7 @@
                 const lastRow = targetTableBody.lastElementChild;
 
                 if (dropTarget === lastRow || !dropTarget.nextElementSibling) {
-                    targetTableBody.appendChild(draggedRow);
+                    targetTableBody.insertBefore(draggedRow, lastRow);
                 } else {
                     const draggedIndex = rows.indexOf(draggedRow);
                     const dropTargetIndex = rows.indexOf(dropTarget);
