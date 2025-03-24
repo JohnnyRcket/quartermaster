@@ -203,7 +203,7 @@
                                     </tr>
                                     <tr class="bg-info bg-opacity-25">
                                         <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal">+</td>
-                                        <td class="bg-info bg-opacity-25"></td>
+                                        <td class="bg-info bg-opacity-25" data-bs-toggle="modal" data-bs-target="#itemModal"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -423,7 +423,7 @@
             draggedRow.classList.remove("dragging");
         }
 
-        function updateTotalSize(table) {
+        async function updateTotalSize(table) {
             const tableBody = table.querySelector("tbody");
             const rows = Array.from(tableBody.rows);
             let totalSize = 0;
@@ -537,7 +537,7 @@
             card.classList.add('card', 'bg-secondary', 'mx-auto', 'mb-2');
 
             const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
+            cardBody.classList.add('card-body', 'table-container');
 
             const row = document.createElement('div');
             row.classList.add('row');
@@ -599,6 +599,55 @@
             cardBody.appendChild(tableContainer);
             card.appendChild(cardBody);
             document.getElementById('animalColumn').appendChild(card);
+        });
+    </script>
+
+    <script>
+        let currentTable = null; // This will store the parent table of the clicked button
+
+        // When the modal is opened, find the parent table
+        document.getElementById('itemModal').addEventListener('shown.bs.modal', function (event) {
+            const button = event.relatedTarget; // The button that triggered the modal
+            currentTable = button.closest('table'); // Find the parent table
+        });
+
+        document.getElementById('itemSaveButton').addEventListener('click', function() {
+            // Get the values from the modal input fields
+            const itemName = document.getElementById('itemName').value;
+            const itemSize = document.getElementById('itemSize').value;
+            const itemDescription = document.getElementById('itemDescription').value;
+
+
+            // Use currentTable (the table that's being worked on)
+            const parentRow = currentTable.querySelector('[data-bs-toggle="modal"]').closest('tr'); // The row containing the "+" button
+
+            // Create a new row to insert the new item
+            const newRow = currentTable.insertRow(parentRow.rowIndex); // Insert a new row just above the "+" row
+            const cell1 = newRow.insertCell(0); // Cell for item name
+            const cell2 = newRow.insertCell(1); // Cell for item size
+            cell1.classList.add('bg-info', 'bg-opacity-25');
+            cell2.classList.add('bg-info', 'bg-opacity-25');
+
+            // Insert the item name and size into the new row
+            cell1.textContent = itemName;
+            cell2.textContent = itemSize;
+
+            // Set itemDescription as hover text (title) for the row
+            newRow.setAttribute('title', itemDescription);
+
+            // Add the same classes as the other rows for styling
+            newRow.classList.add('bg-info', 'bg-opacity-25');
+
+            // Make the new row draggable (like the other rows)
+            newRow.setAttribute('draggable', 'true');
+            newRow.setAttribute('ondragstart', 'drag(event)');
+            newRow.setAttribute('ondragover', 'allowDrop(event)');
+            newRow.setAttribute('ondrop', 'drop(event)');
+
+            // Clear the modal input fields (without closing the modal)
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemSize').value = '';
+            document.getElementById('itemDescription').value = '';
         });
     </script>
 
