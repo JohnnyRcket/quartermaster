@@ -1,0 +1,42 @@
+<div class="card bg-secondary mx-auto mb-2">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-7">
+        <h2>{{ carrier.name }}</h2>
+      </div>
+      <div class="col-xl-5">
+        <h2 [ngClass]="{'overburdened' : carrier.getCurrentTotal() > carrier.capacity }" >{{ carrier ? carrier.getCurrentTotal() : 0 }} / {{ carrier ? carrier.capacity : 0 }}</h2>
+      </div>
+    </div>
+
+    <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+      <table class="table table-hover"
+             cdkDropList
+             [cdkDropListData]="carrier.items"
+             (cdkDropListDropped)="onDrop($event)">
+        <thead>
+        <tr>
+          <th class="bg-info bg-opacity-25">Item</th>
+          <th class="bg-info bg-opacity-25">Size</th>
+        </tr>
+        </thead>
+        <tbody class="bg-info bg-opacity-25">
+        <tr *ngFor="let item of carrier.items"
+            [ngClass]="{'container': item.isContainer(item)}"
+            (click)="openModal(item)"
+            cdkDrag>
+          <td class="bg-info bg-opacity-25">{{ item.name }}</td>
+          <td class="bg-info bg-opacity-25">{{ item.size }}</td>
+        </tr>
+        <tr>
+          <td class="bg-info bg-opacity-25" (click)="openModal()" >+</td>
+          <td class="bg-info bg-opacity-25" (click)="openModal()" > </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngFor="let container of containers">
+    <app-container [container]="container"></app-container>
+  </div>
+</div>
