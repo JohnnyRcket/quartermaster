@@ -1,0 +1,36 @@
+<div class="card-body">
+  <div class="row">
+<div class="col-xl-7">
+  <h2>{{ container.name }}</h2>
+</div>
+<div class="col-xl-5">
+  <h2 [ngClass]="{'overburdened' : container.getCurrentTotal() > container.capacity }" >{{ container.getCurrentTotal() }} / {{ container.capacity }}</h2>
+</div>
+  </div>
+
+<div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+  <table class="table table-hover container"
+         cdkDropList
+         [cdkDropListData]="container.items"
+         (cdkDropListDropped)="onDrop($event)">
+    <thead>
+    <tr>
+      <th class="bg-info bg-opacity-25">Item</th>
+      <th class="bg-info bg-opacity-25">Size</th>
+    </tr>
+    </thead>
+    <tbody class="bg-info bg-opacity-25">
+    <tr *ngFor="let item of container.items"
+        [ngClass]="{'container': item.isContainer(item)}"
+        cdkDrag>
+      <td class="bg-info bg-opacity-25">{{ item.name }}</td>
+      <td class="bg-info bg-opacity-25">{{ item.size }}</td>
+    </tr>
+    <tr>
+      <td class="bg-info bg-opacity-25">+</td>
+      <td class="bg-info bg-opacity-25"> </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
