@@ -10,10 +10,11 @@ import { ContainerModalComponent } from './modals/container-modal.component';
 import { CharacterModalComponent } from './modals/character-modal.component';
 import { AnimalModalComponent } from './modals/animal-modal.component';
 import { ItemModalComponent } from './modals/item-modal.component';
-import {Container} from './entities/container';
 import {NgbActiveModal, NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ThemeService} from './services/theme.service';
 import {Modal} from 'bootstrap'
+import {EmitPackage} from './entities/emitPackage';
+import {Container} from './entities/container';
 
 @Component({
   selector: 'app-root',
@@ -27,10 +28,10 @@ import {Modal} from 'bootstrap'
     NgbModalModule,
     FormsModule,
     CdkDropListGroup,
+    ItemModalComponent,
     ContainerModalComponent,
     CharacterModalComponent,
-    AnimalModalComponent,
-    ItemModalComponent,
+    AnimalModalComponent
   ]
 })
 export class MainPageComponent implements OnInit {
@@ -38,8 +39,12 @@ export class MainPageComponent implements OnInit {
   characters: Carrier[] = [];
   animals: Carrier[] = [];
   items: Item[] = [];
+  container?: Container;
   goldAmount = 1572;
   expAmount = 350;
+  selectedModal!: Modal;
+  selectedItem!: Item;
+  selectedCarrier!: Carrier;
 
   constructor(private modalService: NgbModal, private themeService: ThemeService) {}
 
@@ -50,6 +55,7 @@ export class MainPageComponent implements OnInit {
   ngAfterViewInit() {}
 
   //currently used to parse testdata, but eventually will be used for imports from json
+
   sortCarriers() {
     this.characters = [];
     this.animals = [];
@@ -63,34 +69,34 @@ export class MainPageComponent implements OnInit {
   }
 
   openCharacterModal() {
-    this.modalService.open(ItemModalComponent)
+
   }
 
   openAnimalModal() {
-    this.modalService.open(ItemModalComponent)
-  }
-
-  openItemModal(item?: Item) {
-    this.modalService.open(ItemModalComponent)
 
   }
 
-  openContainerModal(item?: Item | Container) {
-    if (item instanceof Container){
-      this.modalService.open(ContainerModalComponent);
-      //this.modal.componentInstance.currentItem = item as Container;
-    }
-    if (item) {this.openItemModal(item);
+  openItemModal() {
 
-    }
-    else {this.openItemModal()}
   }
 
-  closeModal() {
-    this.modalService.dismissAll();
+  openContainerModal() {
+
   }
+
 
   onThemeSelect(theme: string): void {
     this.themeService.setTheme(theme);
   }
+
+  modalOpen(pack: EmitPackage) {
+    if (pack.item){
+      this.selectedItem = pack.item;
+    }
+    else {this.selectedItem = new Item('', '', 0, '')}
+    this.selectedCarrier = pack.carrier
+    this.selectedModal = pack.emitModal
+
+  }
+
 }

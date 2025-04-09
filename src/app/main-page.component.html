@@ -13,7 +13,8 @@
       <button class="btn btn-secondary btn-sm" (click)="openCharacterModal()">New</button>
 
       <div *ngFor="let character of characters; let i = index">
-        <app-carrier [carrier]="character"></app-carrier>
+        <app-carrier [carrier]="character" (modalEmit)="modalOpen($event)"
+        ></app-carrier>
       </div>
     </div>
     <!-- Animals -->
@@ -22,7 +23,7 @@
       <button class="btn btn-secondary btn-sm" (click)="openAnimalModal()">New</button>
 
       <div *ngFor="let animal of animals; let i = index">
-        <app-carrier [carrier]="animal" ></app-carrier>
+        <app-carrier [carrier]="animal" (modalEmit)="modalOpen($event)"></app-carrier>
       </div>
     </div>
 
@@ -65,7 +66,7 @@
 </div>
 
 <!-- Modals -->
-<app-item-modal></app-item-modal>
+<app-item-modal [item] = selectedItem [carrier]="selectedCarrier"></app-item-modal>
 <app-character-modal></app-character-modal>
 <app-animal-modal></app-animal-modal>
 <app-container-modal></app-container-modal>

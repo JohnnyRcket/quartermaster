@@ -23,14 +23,14 @@
         <tbody class="bg-info bg-opacity-25">
         <tr *ngFor="let item of carrier.items"
             [ngClass]="{'container': item.isContainer(item)}"
-            (click)="openModal(item)"
+            (click)="openModal($event, carrier, item)"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>
         </tr>
-        <tr>
-          <td class="bg-info bg-opacity-25" (click)="openModal()" >+</td>
-          <td class="bg-info bg-opacity-25" (click)="openModal()" > </td>
+        <tr (click)="openModal($event, carrier)">
+          <td class="bg-info bg-opacity-25"  >+</td>
+          <td class="bg-info bg-opacity-25"  > </td>
         </tr>
         </tbody>
       </table>
