@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {Item} from '../entities/item';
 import {FormsModule} from '@angular/forms';
 import {Carrier} from '../entities/carrier';
-import {Container} from '../entities/container';
 import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -16,11 +15,13 @@ import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstr
 
 })
 export class ItemModalComponent {
-  currentItem: Item = new Item('', '', 0, '');
+  currentItem = new Item('', '', 0, '')
 
   ngOnInit() {
-
+    if (this.item) {this.currentItem = this.item}
+    else {this.currentItem = new Item('', '', 0, '')}
   }
+
   ngAfterViewInit() {
 
   }
@@ -38,4 +39,8 @@ export class ItemModalComponent {
   }
 
   protected readonly NgbActiveModal = NgbActiveModal;
+  @Input() item?: Item;
+  @Input() carrier?: Carrier;
+
+
 }
