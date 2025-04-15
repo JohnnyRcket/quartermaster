@@ -13,13 +13,5 @@ export class Item {
     this.description = description;
   }
 
-  isContainer(item: Item): boolean {
-    try {
-    return item instanceof Container;
-    }
-    catch (error) {
-      return false
-    }
-
-  }
+  isContainer(item: Item): boolean { return item.constructor.name === 'Container'; }
 }
