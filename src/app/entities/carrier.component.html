@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col-xl-7">
-        <h2 (click)="animalModal(carrier)">{{ carrier.name }}</h2>
+        <h2 (click)="carrierModal(carrier)">{{ carrier.name }}</h2>
       </div>
       <div class="col-xl-5">
         <h2 [ngClass]="{'overburdened' : carrier.getCurrentTotal() > carrier.capacity }" >{{ carrier ? carrier.getCurrentTotal() : 0 }} / {{ carrier ? carrier.capacity : 0 }}</h2>
@@ -23,12 +23,12 @@
         <tbody class="bg-info bg-opacity-25">
         <tr *ngFor="let item of carrier.items"
             [ngClass]="{'container': item.isContainer(item)}"
-            (click)="openModal(carrier, item)"
+            (click)="openItemModal(carrier, item)"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>
         </tr>
-        <tr (click)="openModal(carrier)">
+        <tr (click)="openItemModal(carrier)">
           <td class="bg-info bg-opacity-25"  >+</td>
           <td class="bg-info bg-opacity-25"  > </td>
         </tr>
