@@ -28,9 +28,8 @@
             ],
             "styles": [
               "src/app/bootstrap/css/bootstrap.min.css",
-              "src/css/bs-theme-overrides.css",
-              "src/css/Footer-Basic-icons.css",
-              "src/styles.css"
+              "src/app/css/bs-theme-overrides.css",
+              "src/app/css/Footer-Basic-icons.css"
             ],
             "scripts": ["src/app/bootstrap/js/bootstrap.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
