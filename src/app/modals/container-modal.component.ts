@@ -19,7 +19,7 @@ export class ContainerModalComponent {
   isEdit: boolean = false;
   currentItem: Container = new Container('', '', 0, '', 0, []);
 
-  //constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal) {}
 
   saveItem() {
     if (this.isEdit) {
@@ -41,5 +41,9 @@ export class ContainerModalComponent {
   clearForm() {
     this.currentItem = new Container('', '', 0, '', 0, []);
     this.isEdit = false;
+  }
+
+  close(){
+    this.activeModal.close();
   }
 }

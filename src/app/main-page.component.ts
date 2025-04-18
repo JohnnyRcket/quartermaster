@@ -10,7 +10,7 @@ import { ContainerModalComponent } from './modals/container-modal.component';
 import { CharacterModalComponent } from './modals/character-modal.component';
 import { AnimalModalComponent } from './modals/animal-modal.component';
 import { ItemModalComponent } from './modals/item-modal.component';
-import {NgbActiveModal, NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ThemeService} from './services/theme.service';
 import {Modal} from 'bootstrap'
 import {EmitPackage} from './entities/emitPackage';
@@ -27,11 +27,7 @@ import {Container} from './entities/container';
     NgbModule,
     NgbModalModule,
     FormsModule,
-    CdkDropListGroup,
-    ItemModalComponent,
-    ContainerModalComponent,
-    CharacterModalComponent,
-    AnimalModalComponent
+    CdkDropListGroup
   ]
 })
 export class MainPageComponent implements OnInit {
@@ -42,9 +38,6 @@ export class MainPageComponent implements OnInit {
   container?: Container;
   goldAmount = 1572;
   expAmount = 350;
-  selectedModal!: Modal;
-  selectedItem!: Item;
-  selectedCarrier!: Carrier;
 
   constructor(private modalService: NgbModal, private themeService: ThemeService) {}
 
@@ -69,15 +62,15 @@ export class MainPageComponent implements OnInit {
   }
 
   openCharacterModal() {
-
+    const modalRef = this.modalService.open(CharacterModalComponent);
   }
 
   openAnimalModal() {
-
+    const modalRef = this.modalService.open(AnimalModalComponent);
   }
 
   openItemModal() {
-
+    const modalRef = this.modalService.open(ItemModalComponent);
   }
 
   openContainerModal() {
@@ -89,14 +82,5 @@ export class MainPageComponent implements OnInit {
     this.themeService.setTheme(theme);
   }
 
-  modalOpen(pack: EmitPackage) {
-    if (pack.item){
-      this.selectedItem = pack.item;
-    }
-    else {this.selectedItem = new Item('', '', 0, '')}
-    this.selectedCarrier = pack.carrier
-    this.selectedModal = pack.emitModal
-
-  }
 
 }

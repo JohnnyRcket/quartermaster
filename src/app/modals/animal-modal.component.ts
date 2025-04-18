@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-animal-modal',
   standalone: true,
   template: `
-    <div class="modal fade" role="dialog" tabindex="-1" id="animal-modal">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Animal</h4>
-            <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+            <button class="btn-close" type="button" aria-label="Close" (click)="close()"></button>
           </div>
           <div class="modal-body">
             <div class="row">
@@ -24,14 +23,18 @@ import { Component } from '@angular/core';
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Save</button>
+            <button class="btn btn-secondary" type="button">Save</button>
             <button class="btn btn-secondary" type="button">Delete</button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-secondary" type="button" (click)="close()">Close</button>
           </div>
         </div>
-      </div>
-    </div>
   `,
   imports: []
 })
-export class AnimalModalComponent {}
+export class AnimalModalComponent {
+
+  constructor(public activeModal: NgbActiveModal) {}
+  close(){
+    this.activeModal.close();
+  }
+}

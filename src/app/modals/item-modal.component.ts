@@ -16,10 +16,13 @@ import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstr
 })
 export class ItemModalComponent {
   currentItem = new Item('', '', 0, '')
+  @Input() item?: Item;
+  @Input() carrier?: Carrier;
+
+  constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit() {
     if (this.item) {this.currentItem = this.item}
-    else {this.currentItem = new Item('', '', 0, '')}
   }
 
   ngAfterViewInit() {
@@ -38,9 +41,8 @@ export class ItemModalComponent {
     //this.currentItem = new Item('', '', 0, '');
   }
 
-  protected readonly NgbActiveModal = NgbActiveModal;
-  @Input() item?: Item;
-  @Input() carrier?: Carrier;
-
+  close(){
+    this.activeModal.close();
+  }
 
 }
