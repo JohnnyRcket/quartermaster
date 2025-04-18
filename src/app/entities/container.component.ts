@@ -3,6 +3,8 @@ import {Item} from './item';
 import { Container } from './container';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {NgClass, NgForOf} from '@angular/common';
+import {ItemModalComponent} from '../modals/item-modal.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-container',
@@ -18,10 +20,11 @@ import {NgClass, NgForOf} from '@angular/common';
 export class ContainerComponent {
   @Input() container!: Container;
 
+  constructor(private modalService: NgbModal) {}
+
   ngOnInit(){
 
   }
-  //onDrop($event: CdkDragDrop<Item[], any>) {}
 
   onDrop(event: CdkDragDrop<any[]>) {
     if (event.container.element.nativeElement.classList.contains("container")  && event.item.element.nativeElement.classList.contains("container")) {
@@ -44,6 +47,11 @@ export class ContainerComponent {
       console.log('Item moved from', event.previousContainer, 'to', event.container);
     }
   }
-
+  openModal(item?: Item) {
+    const modalRef = this.modalService.open(ItemModalComponent);
+    if (item) {
+      modalRef.componentInstance.item = item;
+    }
+  }
 
 }

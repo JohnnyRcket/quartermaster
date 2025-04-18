@@ -11,9 +11,8 @@ import {
 } from '@angular/cdk/drag-drop';
 import {NgClass, NgForOf} from '@angular/common';
 import {ContainerComponent} from './container.component';
-import * as bootstrap from 'bootstrap';
-import {Modal} from 'bootstrap';
-import {EmitPackage} from './emitPackage';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ItemModalComponent} from '../modals/item-modal.component';
 
 @Component({
   selector: 'app-carrier',
@@ -29,10 +28,11 @@ import {EmitPackage} from './emitPackage';
 })
 export class CarrierComponent {
   @Input() carrier!: Carrier;
-  @Output() modalEmit = new EventEmitter<EmitPackage>();
   containers?: Container[];
   private previousItems: Item[] = [];
-  emitModal!: EmitPackage;
+
+
+  constructor(private modalService: NgbModal) {}
 
 ngOnInit() {
   this.containers = [...this.carrier.containers(this.carrier.items)];
@@ -65,13 +65,11 @@ ngOnInit() {
     }
   }
 
-  openModal(event: MouseEvent, carrier: Carrier, item?: Item) {
-    const target = event.target as HTMLElement;
-    const modalElement = document.querySelector('#itemModal') as HTMLElement;
-    const modal = new bootstrap.Modal(modalElement);
-    if (item) {this.emitModal = new EmitPackage(carrier, modal, item)}
-    else {this.emitModal = new EmitPackage(carrier, modal)}
-    this.modalEmit.emit(this.emitModal)
+  openModal(item?: Item) {
+    const modalRef = this.modalService.open(ItemModalComponent);
+    if (item) {
+      modalRef.componentInstance.item = item;
+    }
   }
 
   protected readonly Container = Container;
