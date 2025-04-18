@@ -1,20 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Item } from './entities/item';
-import { Carrier } from './entities/carrier';
-import { CarrierComponent } from './entities/carrier.component';
-import { EXAMPLE_CARRIERS } from './example.data';
-import { NgForOf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { ContainerModalComponent } from './modals/container-modal.component';
-import { CharacterModalComponent } from './modals/character-modal.component';
-import { AnimalModalComponent } from './modals/animal-modal.component';
-import { ItemModalComponent } from './modals/item-modal.component';
-import { NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {Item} from './entities/item';
+import {Carrier} from './entities/carrier';
+import {CarrierComponent} from './entities/carrier.component';
+import {EXAMPLE_CARRIERS} from './example.data';
+import {NgForOf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {CdkDropListGroup} from '@angular/cdk/drag-drop';
+import {CharacterModalComponent} from './modals/character-modal.component';
+import {AnimalModalComponent} from './modals/animal-modal.component';
+import {ItemModalComponent} from './modals/item-modal.component';
+import {NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ThemeService} from './services/theme.service';
-import {Modal} from 'bootstrap'
-import {EmitPackage} from './entities/emitPackage';
 import {Container} from './entities/container';
+import {CarrierType} from './entities/carrierType';
 
 @Component({
   selector: 'app-root',
@@ -32,10 +30,11 @@ import {Container} from './entities/container';
 })
 export class MainPageComponent implements OnInit {
   carriers: Carrier[] = EXAMPLE_CARRIERS;
-  characters: Carrier[] = [];
-  animals: Carrier[] = [];
+  characters: Carrier[] = CHARACTERS;
+  animals: Carrier[] = ANIMALS;
   items: Item[] = [];
   container?: Container;
+  toolBoxCarrier: Carrier = new Carrier("007", "toolbox", 1000, [], CarrierType.Tool)
   goldAmount = 1572;
   expAmount = 350;
 
@@ -50,13 +49,11 @@ export class MainPageComponent implements OnInit {
   //currently used to parse testdata, but eventually will be used for imports from json
 
   sortCarriers() {
-    this.characters = [];
-    this.animals = [];
     this.carriers.forEach(carrier => {
       if (carrier.type === 'Character') {
-        this.characters.push(carrier);
+        CHARACTERS.push(carrier);
       } else if (carrier.type === 'Animal') {
-        this.animals.push(carrier);
+        ANIMALS.push(carrier);
       }
     });
   }
@@ -69,8 +66,9 @@ export class MainPageComponent implements OnInit {
     const modalRef = this.modalService.open(AnimalModalComponent);
   }
 
-  openItemModal() {
+  openItemModal(carrier: Carrier) {
     const modalRef = this.modalService.open(ItemModalComponent);
+    modalRef.componentInstance.carrier = carrier;
   }
 
   openContainerModal() {
@@ -84,3 +82,5 @@ export class MainPageComponent implements OnInit {
 
 
 }
+export const ANIMALS: Carrier[] = [];
+export const CHARACTERS: Carrier[] = [];
