@@ -14,6 +14,8 @@ import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {AnimalModalComponent} from '../modals/animal-modal.component';
+import {CharacterModalComponent} from '../modals/character-modal.component';
+import {CarrierType} from './carrierType';
 
 @Component({
   selector: 'app-carrier',
@@ -66,12 +68,18 @@ ngOnInit() {
     }
   }
 
-  animalModal(carrier: Carrier){
-    const modalRef = this.modalService.open(AnimalModalComponent);
-    modalRef.componentInstance.editCarrier = carrier;
+  carrierModal(carrier: Carrier){
+    const componentMap = {
+      [CarrierType.Character]: CharacterModalComponent,
+      [CarrierType.Animal]: AnimalModalComponent
+    } as const;
+
+    const modalComponent = componentMap[carrier.type as CarrierType.Character | CarrierType.Animal];
+    const modalRef = this.modalService.open(modalComponent);
+    modalRef.componentInstance.existingCarrier = carrier;
   }
 
-  openModal(carrier: Carrier, item?: Item) {
+  openItemModal(carrier: Carrier, item?: Item) {
     const modalRef = this.modalService.open(ItemModalComponent);
     modalRef.componentInstance.carrier = carrier;
     if (item) {
