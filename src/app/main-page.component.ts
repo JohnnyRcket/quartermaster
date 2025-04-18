@@ -6,13 +6,12 @@ import {EXAMPLE_CARRIERS} from './example.data';
 import {NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
-import {CharacterModalComponent} from './modals/character-modal.component';
-import {AnimalModalComponent} from './modals/animal-modal.component';
 import {ItemModalComponent} from './modals/item-modal.component';
 import {NgbModal, NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ThemeService} from './services/theme.service';
 import {Container} from './entities/container';
 import {CarrierType} from './entities/carrierType';
+import {CarrierModalComponent} from './modals/carrier-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -59,11 +58,13 @@ export class MainPageComponent implements OnInit {
   }
 
   openCharacterModal() {
-    const modalRef = this.modalService.open(CharacterModalComponent);
+    const modalRef = this.modalService.open(CarrierModalComponent);
+    modalRef.componentInstance.carrierType = CarrierType.Character;
   }
 
   openAnimalModal() {
-    const modalRef = this.modalService.open(AnimalModalComponent);
+    const modalRef = this.modalService.open(CarrierModalComponent);
+    modalRef.componentInstance.carrierType = CarrierType.Animal;
   }
 
   openItemModal(carrier: Carrier) {

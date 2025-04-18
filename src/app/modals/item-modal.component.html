@@ -30,7 +30,7 @@
         <input
           class="form-control"
           type="text"
-          [(ngModel)]="currentItem.name"
+          [(ngModel)]="bufferItem.name"
           id="itemName"
           style="background-color: white;">
       </div>
@@ -39,7 +39,7 @@
         <input
           class="form-control"
           type="number"
-          [(ngModel)]="currentItem.size"
+          [(ngModel)]="bufferItem.size"
           id="itemSize"
           style="background-color: white;">
       </div>
@@ -50,7 +50,7 @@
       <textarea
         class="form-control"
         rows="4"
-        [(ngModel)]="currentItem.description"
+        [(ngModel)]="bufferItem.description"
         id="itemDescription"
         style="background-color: white;"></textarea>
     </div>
