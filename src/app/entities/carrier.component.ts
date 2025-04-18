@@ -13,6 +13,7 @@ import {NgClass, NgForOf} from '@angular/common';
 import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
+import {AnimalModalComponent} from '../modals/animal-modal.component';
 
 @Component({
   selector: 'app-carrier',
@@ -65,8 +66,14 @@ ngOnInit() {
     }
   }
 
-  openModal(item?: Item) {
+  animalModal(carrier: Carrier){
+    const modalRef = this.modalService.open(AnimalModalComponent);
+    modalRef.componentInstance.editCarrier = carrier;
+  }
+
+  openModal(carrier: Carrier, item?: Item) {
     const modalRef = this.modalService.open(ItemModalComponent);
+    modalRef.componentInstance.carrier = carrier;
     if (item) {
       modalRef.componentInstance.item = item;
     }

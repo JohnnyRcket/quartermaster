@@ -1,4 +1,5 @@
 export enum CarrierType {
   Animal = 'Animal',
-  Character = 'Character'
+  Character = 'Character',
+  Tool = 'Tool'
 }
