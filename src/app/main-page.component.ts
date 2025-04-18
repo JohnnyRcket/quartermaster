@@ -20,7 +20,7 @@ import {Container} from './entities/container';
   selector: 'app-root',
   standalone: true,
   templateUrl: './main-page.component.html',
-  styleUrl: './bootstrap/css/bootstrap.min.css',
+  styleUrls: ['./bootstrap/css/bootstrap.min.css', './css/Footer-Basic-icons.css', './css/bs-theme-overrides.css'],
   imports: [
     CarrierComponent,
     NgForOf,
