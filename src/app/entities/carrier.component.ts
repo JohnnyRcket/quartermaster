@@ -13,9 +13,8 @@ import {NgClass, NgForOf} from '@angular/common';
 import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
-import {AnimalModalComponent} from '../modals/animal-modal.component';
-import {CharacterModalComponent} from '../modals/character-modal.component';
 import {CarrierType} from './carrierType';
+import {CarrierModalComponent} from '../modals/carrier-modal.component';
 
 @Component({
   selector: 'app-carrier',
@@ -69,21 +68,21 @@ ngOnInit() {
   }
 
   carrierModal(carrier: Carrier){
-    const componentMap = {
-      [CarrierType.Character]: CharacterModalComponent,
-      [CarrierType.Animal]: AnimalModalComponent
-    } as const;
+    if (carrier.type !== CarrierType.Animal && carrier.type !== CarrierType.Character) {
+      throw new Error(`Unsupported carrier type: ${carrier.type}`);
+    }
 
-    const modalComponent = componentMap[carrier.type as CarrierType.Character | CarrierType.Animal];
-    const modalRef = this.modalService.open(modalComponent);
+    const modalRef = this.modalService.open(CarrierModalComponent);
+    modalRef.componentInstance.carrierType = carrier.type;
     modalRef.componentInstance.existingCarrier = carrier;
   }
 
   openItemModal(carrier: Carrier, item?: Item) {
-    const modalRef = this.modalService.open(ItemModalComponent);
-    modalRef.componentInstance.carrier = carrier;
     if (item) {
-      modalRef.componentInstance.item = item;
+
+    }
+    else {
+      const modalRef = this.modalService.open(ItemModalComponent);
     }
   }
 

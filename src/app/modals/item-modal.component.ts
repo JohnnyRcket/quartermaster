@@ -15,14 +15,18 @@ import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstr
 
 })
 export class ItemModalComponent {
-  currentItem = new Item('', '', 0, '')
-  @Input() item?: Item;
-  @Input() carrier?: Carrier;
+  bufferItem = new Item('', '', 0, '')
+  @Input() existingItem: Item|null = null;
+  @Input() carrier: Carrier|null = null;
+  title: string = "New Item"
 
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit() {
-    if (this.item) {this.currentItem = this.item}
+    if (this.existingItem) {
+      Object.assign(this.bufferItem, this.existingItem);
+      this.title = "Edit Item"
+    }
   }
 
   ngAfterViewInit() {
