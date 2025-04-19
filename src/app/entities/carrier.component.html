@@ -22,7 +22,7 @@
         </thead>
         <tbody class="bg-info bg-opacity-25">
         <tr *ngFor="let item of carrier.items"
-            [ngClass]="{'container': item.isContainer(item)}"
+            [ngClass]="{'container': item.isContainer()}"
             (click)="openItemModal(carrier, item)"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>

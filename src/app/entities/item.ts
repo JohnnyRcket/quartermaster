@@ -13,5 +13,4 @@ export class Item {
     this.description = description;
   }
 
-  isContainer(item: Item): boolean { return item.constructor.name === 'Container'; }
-}
+  isContainer(): boolean { return this.constructor.name === 'Container'; }}
