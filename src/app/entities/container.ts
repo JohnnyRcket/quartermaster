@@ -2,7 +2,7 @@ import { Item } from './item';
 
 export class Container extends Item {
   capacity: number;
-  items: Item[];
+  items: Item[] = [];
   constructor(id: string, name: string, size: number, description: string, capacity: number,
               items: Item[]) {
     super(id, name, size, description)

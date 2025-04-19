@@ -77,14 +77,10 @@ ngOnInit() {
     modalRef.componentInstance.existingCarrier = carrier;
   }
 
-  openItemModal(carrier: Carrier, item?: Item) {
-    if (item) {
-
-    }
-    else {
-      const modalRef = this.modalService.open(ItemModalComponent);
-    }
+  openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
+    const modalRef = this.modalService.open(ItemModalComponent);
+    modalRef.componentInstance.parent = parent;
+    modalRef.componentInstance.existingItem = existingItem;
   }
 
-  protected readonly Container = Container;
 }

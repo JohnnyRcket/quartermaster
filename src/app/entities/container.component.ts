@@ -5,6 +5,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem }
 import {NgClass, NgForOf} from '@angular/common';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Carrier} from './carrier';
 
 @Component({
   selector: 'app-container',
@@ -47,11 +48,10 @@ export class ContainerComponent {
       console.log('Item moved from', event.previousContainer, 'to', event.container);
     }
   }
-  openModal(item?: Item) {
+  openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
     const modalRef = this.modalService.open(ItemModalComponent);
-    if (item) {
-      modalRef.componentInstance.item = item;
-    }
+    modalRef.componentInstance.parent = parent;
+    modalRef.componentInstance.existingItem = existingItem;
   }
 
 }
