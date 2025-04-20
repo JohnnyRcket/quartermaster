@@ -3,7 +3,7 @@ import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
 import {CarrierComponent} from './entities/carrier.component';
 import {EXAMPLE_CARRIERS} from './example.data';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
 import {ItemModalComponent} from './modals/item-modal.component';
@@ -12,6 +12,8 @@ import {ThemeService} from './services/theme.service';
 import {Container} from './entities/container';
 import {CarrierType} from './entities/carrierType';
 import {CarrierModalComponent} from './modals/carrier-modal.component';
+import {ToolboxComponent} from './toolbox.component';
+
 
 @Component({
   selector: 'app-root',
@@ -24,8 +26,10 @@ import {CarrierModalComponent} from './modals/carrier-modal.component';
     NgbModule,
     NgbModalModule,
     FormsModule,
-    CdkDropListGroup
-  ]
+    CdkDropListGroup,
+    ToolboxComponent
+  ],
+
 })
 export class MainPageComponent implements OnInit {
   carriers: Carrier[] = EXAMPLE_CARRIERS;
@@ -34,8 +38,6 @@ export class MainPageComponent implements OnInit {
   items: Item[] = [];
   container?: Container;
   toolBoxCarrier: Carrier = new Carrier("007", "toolbox", 1000, [], CarrierType.Tool)
-  goldAmount = 1572;
-  expAmount = 350;
 
   constructor(private modalService: NgbModal, private themeService: ThemeService) {}
 
@@ -43,7 +45,8 @@ export class MainPageComponent implements OnInit {
     this.sortCarriers();
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   //currently used to parse testdata, but eventually will be used for imports from json
 
@@ -72,15 +75,14 @@ export class MainPageComponent implements OnInit {
     modalRef.componentInstance.carrier = carrier;
   }
 
-  openContainerModal() {
-
-  }
-
 
   onThemeSelect(theme: string): void {
     this.themeService.setTheme(theme);
   }
 
+  testClick(){
+    console.log("theeeemes")
+  }
 
 }
 export const ANIMALS: Carrier[] = [];

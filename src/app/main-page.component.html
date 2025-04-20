@@ -2,7 +2,7 @@
   <!-- Title Section -->
   <div class="row">
     <div class="col">
-      <h1 class="text-center text-danger" style="margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">Quartermaster</h1>
+      <h1 class="text-center text-danger" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">Quartermaster</h1>
     </div>
   </div>
   <!-- dropListGroup start -->
@@ -17,7 +17,7 @@
           </div>
       </div>
       <div *ngFor="let character of characters; let i = index">
-        <app-carrier [carrier]="character"></app-carrier>
+        <app-carrier [carrier]="character" ></app-carrier>
       </div>
     </div>
     <!-- Animals -->
@@ -37,48 +37,18 @@
     <!-- Toolbox -->
     <div class="col">
       <span style="font-size: 30px;">Toolbox (Items)</span>
-      <div class="card bg-secondary" style="position: relative;">
-        <div class="card-body">
-          <h2>Magic Box</h2>
-
-
-          <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th class="bg-info bg-opacity-25">Item</th>
-                <th class="bg-info bg-opacity-25">Size</th>
-              </tr>
-              </thead>
-              <tbody class="bg-info bg-opacity-25">
-              <tr *ngFor="let item of items">
-                <td class="bg-info bg-opacity-25">{{ item.name }}</td>
-                <td class="bg-info bg-opacity-25">{{ item.size }}</td>
-              </tr>
-              <tr>
-                <td class="bg-info bg-opacity-25" (click)="openItemModal(this.toolBoxCarrier)">+</td>
-                <td class="bg-info bg-opacity-25"></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Gold and EXP Input -->
-          <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"></h4>
-          <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"></h4>
-        </div>
+      <div style="position: sticky; top: 1rem; z-index: 10;">
+      <app-toolbox ></app-toolbox>
       </div>
     </div>
   </div>
 </div>
 
-
-
 <footer class="d-xl-flex justify-content-xl-center align-items-xl-end">
   <div class="row d-xl-flex flex-fill justify-content-xl-center align-items-xl-end">
     <div class="col-sm-2 col-xl-1 d-xl-flex justify-content-xl-start align-items-xl-end">
       <div class="theme-switcher dropup d-flex justify-content-start align-items-center">
-        <button class="btn btn-link dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="margin-left: 50px; color: var(--bs-body-color);">
+        <button class="btn btn-link dropdown-toggle" (click)="testClick()" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="z-index: 2050; margin-left: 50px; color: var(--bs-body-color);">
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill mb-1">
             <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
           </svg>
@@ -103,7 +73,7 @@
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;">Import...</button>
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;">Export...</button>
     </div>
-    <div class="col-xl-2 d-flex d-lg-flex justify-content-center align-items-center align-items-lg-center align-items-xl-end" style="text-align: center;"><a class="d-lg-flex justify-content-lg-center align-items-lg-center" href="Ko-fi.com/bizentine" style="font-size: 15px;">Ko-fi.com/bizentine</a></div>
+    <div class="col-xl-2 d-flex d-lg-flex justify-content-center align-items-center align-items-lg-center align-items-xl-end" style="text-align: center;"><a class="d-lg-flex justify-content-lg-center align-items-lg-center" href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer" style="font-size: 15px;">Ko-fi.com/bizentine</a></div>
   </div>
 </footer>
 <script src="app/bootstrap/js/bootstrap.min.js"></script>

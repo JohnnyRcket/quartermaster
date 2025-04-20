@@ -1,3 +1,8 @@
+<ng-template #tooltipTemplate>
+  <app-tooltip [item]="hoveredItem"></app-tooltip>
+</ng-template>
+
+
 <div class="card-body">
   <div class="row">
 <div class="col-xl-7">
@@ -23,6 +28,12 @@
     <tr *ngFor="let item of container.items"
         [ngClass]="{'container': item.isContainer()}"
         (click)="openItemModal(container, item)"
+        (mouseenter)="hoveredItem = item"
+        (mouseleave)="hoveredItem = null"
+        [tooltip]="tooltipTemplate"
+        container="body"
+        triggers="hover"
+        placement="top"
         cdkDrag>
       <td class="bg-info bg-opacity-25">{{ item.name }}</td>
       <td class="bg-info bg-opacity-25">{{ item.size }}</td>
