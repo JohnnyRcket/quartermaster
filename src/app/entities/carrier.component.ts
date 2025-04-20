@@ -15,30 +15,40 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {CarrierType} from './carrierType';
 import {CarrierModalComponent} from '../modals/carrier-modal.component';
+import { v4 as uuidv4 } from 'uuid';
+import {TooltipDirective} from 'ngx-bootstrap/tooltip';
+import { TooltipComponent } from '../tooltips/tooltip.component';
+
 
 @Component({
   selector: 'app-carrier',
   templateUrl: './carrier.component.html',
+  styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   standalone: true,
   imports: [
     CdkDropList,
     NgForOf,
     CdkDrag,
     ContainerComponent,
-    NgClass
+    NgClass,
+    TooltipDirective,
+    TooltipComponent
   ]
 })
 export class CarrierComponent {
   @Input() carrier!: Carrier;
   containers?: Container[];
   private previousItems: Item[] = [];
-
+  hoveredItem: any = null;
 
   constructor(private modalService: NgbModal) {}
 
-ngOnInit() {
-  this.containers = [...this.carrier.containers(this.carrier.items)];
-}
+  ngOnInit() {
+    this.containers = [...this.carrier.containers(this.carrier.items)];
+  }
+
+  ngAfterViewInit() {
+  }
 
   ngDoCheck() {
     // Compare current containers with previous containers
@@ -54,8 +64,15 @@ ngOnInit() {
   }
   //onDrop($event: CdkDragDrop<Item[], any>) {}
   onDrop(event: CdkDragDrop<any[]>) {
+    const isMagicBox = event.previousContainer.id === 'magic-toolbox';
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else if (isMagicBox) {
+      const originalItem = event.previousContainer.data[event.previousIndex];
+      const clonedItem = Object.assign(new Item('', '', 0, ''), originalItem);
+      clonedItem.id = uuidv4();
+      event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -63,8 +80,8 @@ ngOnInit() {
         event.previousIndex,
         event.currentIndex
       );
-      this.containers = [...this.carrier.containers(this.carrier.items)];
     }
+    this.containers = [...this.carrier.containers(this.carrier.items)];
   }
 
   carrierModal(carrier: Carrier){
@@ -83,4 +100,15 @@ ngOnInit() {
     modalRef.componentInstance.existingItem = existingItem;
   }
 
+  openContainerModal(parent: Carrier | Container) {
+    const modalRef = this.modalService.open(ItemModalComponent, );
+    modalRef.componentInstance.parent = parent;
+    modalRef.componentInstance.isContainer = true;
+  }
+  getItemTooltip(item: Item): string {
+    return `
+    <strong>${item.name}</strong>, size: ${item.size}<br>
+    <em>${item.description || ''}</em>
+  `;
+  }
 }

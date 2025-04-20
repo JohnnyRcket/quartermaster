@@ -10,6 +10,7 @@ import { ANIMALS, CHARACTERS } from '../main-page.component';
   selector: 'app-carrier-modal',
   standalone: true,
   templateUrl: `./carrier-modal.component.html`,
+  styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   imports: [FormsModule]
 })
 export class CarrierModalComponent {

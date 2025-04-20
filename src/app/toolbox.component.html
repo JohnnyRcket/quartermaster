@@ -1,8 +1,49 @@
-<div class="toolbox" style="position: fixed; top: 20px; right: 20px; width: 250px;">
-  <!-- Toolbox content goes here -->
-  <div class="card">
-    <div class="card-body">
-      Toolbox
+<ng-template #tooltipTemplate>
+  <app-tooltip [item]="hoveredItem"></app-tooltip>
+</ng-template>
+
+
+<div class="card bg-secondary dark-shadow">
+  <div class="card-body">
+    <h2>Magic Box</h2>
+
+
+    <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+      <table class="table table-hover"
+             [cdkDropListData]="toolbox.items"
+             (cdkDropListDropped)="onDrop($event)"
+             cdkDropList id="magic-toolbox">
+        <thead>
+        <tr>
+          <th class="bg-info bg-opacity-25">Item</th>
+          <th class="bg-info bg-opacity-25">Size</th>
+        </tr>
+        </thead>
+        <tbody class="bg-info bg-opacity-25">
+        <tr *ngFor="let item of toolbox.items"
+            [ngClass]="{'container': item.isContainer()}"
+            (click)="openItemModal(toolbox, item)"
+            (mouseenter)="hoveredItem = item"
+            (mouseleave)="hoveredItem = null"
+            [tooltip]="tooltipTemplate"
+            container="body"
+            triggers="hover"
+            placement="top"
+            style="position: relative;"
+            cdkDrag>
+          <td class="bg-info bg-opacity-25">{{ item.name }}</td>
+          <td class="bg-info bg-opacity-25">{{ item.size }}</td>
+        </tr>
+        <tr>
+          <td class="bg-info bg-opacity-25" (click)="openItemModal(toolbox)">+</td>
+          <td class="bg-info bg-opacity-25"></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+
+    <!-- Gold and EXP Input -->
+    <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"></h4>
+    <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"></h4>
   </div>
 </div>

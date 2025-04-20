@@ -5,26 +5,31 @@ import {Carrier} from '../entities/carrier';
 import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {Container} from '../entities/container';
 import {NgIf} from '@angular/common';
+import {NgSelectComponent, NgSelectModule} from '@ng-select/ng-select';
+import {EXAMPLE_ITEMS} from '../example.data';
 
 @Component({
   selector: 'app-item-modal',
   standalone: true,
   templateUrl: `./item-modal.component.html`,
-  styleUrl: '../bootstrap/css/bootstrap.min.css',
+  styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   imports: [
-    FormsModule, NgbModalModule, NgIf
+    FormsModule, NgbModalModule, NgIf, NgSelectComponent
   ]
 
 })
 export class ItemModalComponent {
-  bufferItem = new Item('', '', 0, '');
-  emptyItem = new Item('', '', 0, '')
+  bufferItem!: Item | Container;
+  emptyContainer: Container = new Container('', '', 0, '', 0, []);
+  emptyItem = new Item('', '', 0, '');
   @Input() existingItem: Item|Container|null = null;
   @Input() parent: Carrier | Container | null = null;
   @ViewChildren('formInput') inputs!: QueryList<ElementRef>;
   title: string = "Bad Modal"
   delete: string = "Bad Button"
   isContainer: boolean = false;
+  itemList: Item[] = EXAMPLE_ITEMS
+  selectedItem: Item = new Item('', '', 0, '')
   get containerItem(): Container {
     return this.bufferItem as any as Container;
   }
@@ -38,7 +43,9 @@ export class ItemModalComponent {
         first.nativeElement.focus();
       }
     });
-
+    this.bufferItem = this.isContainer
+      ? this.emptyContainer
+      : this.emptyItem
     if (this.existingItem) {
       this.isContainer = this.existingItem.isContainer();
       Object.assign(this.bufferItem, this.existingItem);
@@ -104,4 +111,10 @@ export class ItemModalComponent {
       next.nativeElement.focus();
     }
   }
+
+  onItemSelected(item: Item) {
+    this.bufferItem = Object.assign({}, item);
+  }
+
+
 }
