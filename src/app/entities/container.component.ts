@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Item} from './item';
 import { Container } from './container';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -6,21 +6,27 @@ import {NgClass, NgForOf} from '@angular/common';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Carrier} from './carrier';
+import { v4 as uuidv4 } from 'uuid';
+import {TooltipComponent} from '../tooltips/tooltip.component';
+import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
+  styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   standalone: true,
   imports: [
     CdkDropList,
     NgForOf,
     CdkDrag,
     NgClass,
+    TooltipComponent,
+    TooltipDirective
   ]
 })
 export class ContainerComponent {
   @Input() container!: Container;
-
+  hoveredItem: any = null;
   constructor(private modalService: NgbModal) {}
 
   ngOnInit(){
@@ -28,7 +34,8 @@ export class ContainerComponent {
   }
 
   onDrop(event: CdkDragDrop<any[]>) {
-    if (event.container.element.nativeElement.classList.contains("container")  && event.item.element.nativeElement.classList.contains("container")) {
+    const isMagicBox = event.previousContainer.id === 'magic-toolbox';
+    if (event.container.element.nativeElement.classList.contains("container") && event.item.element.nativeElement.classList.contains("container")) {
 
       //Todo: change this to a modal
 
@@ -38,6 +45,11 @@ export class ContainerComponent {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else if (isMagicBox) {
+      const originalItem = event.previousContainer.data[event.previousIndex];
+      const clonedItem = Object.assign(new Item('', '', 0, ''), originalItem);
+      clonedItem.id = uuidv4();
+      event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -45,13 +57,14 @@ export class ContainerComponent {
         event.previousIndex,
         event.currentIndex
       );
-      console.log('Item moved from', event.previousContainer, 'to', event.container);
     }
   }
+
   openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
     const modalRef = this.modalService.open(ItemModalComponent);
     modalRef.componentInstance.parent = parent;
     modalRef.componentInstance.existingItem = existingItem;
   }
+
 
 }
