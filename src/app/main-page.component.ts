@@ -45,6 +45,7 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit() {
     this.sortCarriers();
+    console.log('Viewport width:', window.innerWidth);
   }
 
   ngAfterViewInit() {

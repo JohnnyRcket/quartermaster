@@ -7,3 +7,22 @@
 .overburdened {color: #dc3545}
 .dark-shadow {box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);}
 .animate__shakeX {animation-duration: 0.2s !important;}
+
+@media (min-width: 768px) {
+  .col-md-4 {
+    width: 33.333333% !important;
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .col-6 {
+    width: 50% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .col-12 {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+}
