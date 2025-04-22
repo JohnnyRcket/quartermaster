@@ -37,7 +37,7 @@ export class MainPageComponent implements OnInit {
   animals: Carrier[] = ANIMALS;
   items: Item[] = [];
   container?: Container;
-  toolBoxCarrier: Carrier = new Carrier("007", "toolbox", 1000, [], CarrierType.Tool)
+  toolBoxCarrier: Carrier = new Carrier("toolbox", 1000, [], CarrierType.Tool)
 
   constructor(private modalService: NgbModal, private themeService: ThemeService) {}
 

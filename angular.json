@@ -29,7 +29,8 @@
             "styles": [
               "src/app/bootstrap/css/bootstrap.min.css",
               "src/app/css/bs-theme-overrides.css",
-              "src/app/css/Footer-Basic-icons.css"
+              "src/app/css/Footer-Basic-icons.css",
+              "node_modules/animate.css/animate.min.css"
             ],
             "scripts": ["src/app/bootstrap/js/bootstrap.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },

@@ -13,9 +13,14 @@
       </div>
       <div class="col">
         <span>Capacity: </span>
-        <input #formInput class="form-control-sm" type="number"
+        <input #formInput class="form-control-sm animate__animated"
+               type="number" inputmode="numeric"
+               pattern="[0-9]*" min="0" step="1"
+               [class.animate__shakeX]="shakeInput"
+               (keydown)="onKeyDown($event)"
                [(ngModel)]="bufferCarrier.capacity"
-               (keydown.enter)="onEnter($event)">
+               (keydown.enter)="onEnter($event)"
+               (animationend)="onAnimationEnd()">
       </div>
     </div>
   </div>
