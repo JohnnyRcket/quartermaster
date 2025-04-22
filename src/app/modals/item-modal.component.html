@@ -3,17 +3,48 @@
     <h4 class="modal-title mb-0" id="itemModalLabel">{{ title }}</h4>
 
     <div class="d-flex align-items-center">
-      <label for="templateSelect" class="form-label me-2 mb-0">Item Template:</label>
-      <ng-select
-        id="templateSelect"
-        class="form-select form-select-sm w-auto me-3"
-        style="min-width: 150px; background-color: white;"
-        [items]="itemList"
+      <label class="form-label me-2 mb-0">Item Template:</label>
+      <ng-container *ngIf="dropdownReady">
+      <ngx-select-dropdown
+        [config]="{
+        displayKey: 'name',
+        search: true,
+        placeholder: 'Select item'}"
+        [options]="itemList"
+
+        (change)="onItemSelected($event)"
         bindLabel="name"
-        placeholder="Select item"
-        [(ngModel)]="selectedItem"
-        [searchable]="true">
-      </ng-select>
+        class="custom-dropdown">
+        <ng-template let-item="item" ngx-select-dropdown-option>
+          {{ item.name }}
+        </ng-template>
+      </ngx-select-dropdown>
+      </ng-container>
+
+      <style>
+        .custom-dropdown {
+          min-width: 200px;
+          max-width: 300px;
+        }
+
+        .custom-dropdown .ngx-select-dropdown-list {
+          position: absolute !important;
+          z-index: 1060 !important;
+          background-color: white !important;
+          min-width: 200px !important;
+          max-width: 300px !important;
+          border: 1px solid #dee2e6 !important;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-dropdown .ngx-select-dropdown-list .ngx-dropdown-list-item {
+          padding: 0.5rem 1rem;
+        }
+
+        .custom-dropdown .ngx-select-dropdown-list .ngx-dropdown-list-item:hover {
+          background-color: #f8f9fa;
+        }
+      </style>
 
       <button
         class="btn-close"
@@ -37,18 +68,20 @@
       </div>
       <div class="flex-fill">
         <label for="itemSize" class="form-label mb-1">Size:</label>
-        <input #formInput
-          class="form-control"
-          type="number"
+        <input #formInput class="form-control"
+               type="number" inputmode="numeric"
+               pattern="[0-9]*" min="0" step="1"
+               (keydown)="filterDigitsOnly($event)"
           [(ngModel)]="bufferItem.size" (keydown.enter)="onEnter($event)"
           id="itemSize"
           style="background-color: white;">
       </div>
       <div class="flex-fill" *ngIf="isContainer">
         <label for="itemCapacity" class="form-label mb-1">Capacity:</label>
-        <input #formInput
-          class="form-control"
-          type="number"
+        <input #formInput class="form-control"
+               type="number" inputmode="numeric"
+               pattern="[0-9]*" min="0" step="1"
+               (keydown)="filterDigitsOnly($event)"
           [(ngModel)]="containerItem.capacity" (keydown.enter)="onEnter($event)"
           id="itemCapacity"
           style="background-color: white;">

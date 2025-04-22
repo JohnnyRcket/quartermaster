@@ -47,7 +47,7 @@ export class ContainerComponent {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else if (isMagicBox) {
       const originalItem = event.previousContainer.data[event.previousIndex];
-      const clonedItem = Object.assign(new Item('', '', 0, ''), originalItem);
+      const clonedItem = Object.assign(new Item('', 0, ''), originalItem);
       clonedItem.id = uuidv4();
       event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {

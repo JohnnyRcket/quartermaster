@@ -2,7 +2,6 @@ import {Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/co
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Carrier } from '../entities/carrier';
 import { CarrierType } from '../entities/carrierType';
-import { v4 as uuidv4 } from 'uuid';
 import { FormsModule } from '@angular/forms';
 import { ANIMALS, CHARACTERS } from '../main-page.component';
 
@@ -18,10 +17,11 @@ export class CarrierModalComponent {
   @Input() carrierType: CarrierType = CarrierType.Tool;
   @ViewChildren('formInput') inputs!: QueryList<ElementRef>;
 
-  bufferCarrier = new Carrier(uuidv4(), '', 0, [], CarrierType.Tool);
-  emptyCarrier = new Carrier(uuidv4(), '', 0, [], CarrierType.Tool);
+  bufferCarrier = new Carrier('', 0, [], CarrierType.Tool);
+  emptyCarrier = new Carrier('', 0, [], CarrierType.Tool);
   title: string = "Bad Title";
   delete: string = "Bad Button";
+  shakeInput = false;
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -101,5 +101,23 @@ export class CarrierModalComponent {
     if (next) {
       next.nativeElement.focus();
     }
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' ||
+      event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      return;
+    }
+
+    if (!/^[0-9]$/i.test(event.key)) {
+      event.preventDefault();
+      this.shakeInput = true;
+    }
+  }
+
+
+  onAnimationEnd(): void {
+    this.shakeInput = false;
+    console.log("shakestop")
   }
 }

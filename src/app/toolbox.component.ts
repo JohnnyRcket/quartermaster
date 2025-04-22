@@ -30,7 +30,7 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
     standalone: true
 })
 export class ToolboxComponent {
-  toolbox: Carrier = new Carrier("7001", "Toolbox", 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
+  toolbox: Carrier = new Carrier("Toolbox", 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
   goldAmount = 1572;
   expAmount = 350;
   hoveredItem: any = null;
@@ -53,7 +53,7 @@ export class ToolboxComponent {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else if (isMagicBox) {
       const originalItem = event.previousContainer.data[event.previousIndex];
-      const clonedItem = Object.assign(new Item('', '', 0, ''), originalItem);
+      const clonedItem = Object.assign(new Item('', 0, ''), originalItem);
       clonedItem.id = uuidv4();
       event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {

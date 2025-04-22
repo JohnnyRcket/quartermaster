@@ -1,12 +1,13 @@
-import {Component, ElementRef, Input, input, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
 import {Item} from '../entities/item';
 import {FormsModule} from '@angular/forms';
 import {Carrier} from '../entities/carrier';
-import {NgbActiveModal, NgbModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {Container} from '../entities/container';
 import {NgIf} from '@angular/common';
-import {NgSelectComponent, NgSelectModule} from '@ng-select/ng-select';
 import {EXAMPLE_ITEMS} from '../example.data';
+import {SelectDropDownModule} from 'ngx-select-dropdown';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-item-modal',
@@ -14,14 +15,14 @@ import {EXAMPLE_ITEMS} from '../example.data';
   templateUrl: `./item-modal.component.html`,
   styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   imports: [
-    FormsModule, NgbModalModule, NgIf, NgSelectComponent
+    FormsModule, NgbModalModule, NgIf, SelectDropDownModule
   ]
 
 })
 export class ItemModalComponent {
   bufferItem!: Item | Container;
-  emptyContainer: Container = new Container('', '', 0, '', 0, []);
-  emptyItem = new Item('', '', 0, '');
+  emptyContainer: Container = new Container('', 0, '', 0, []);
+  emptyItem = new Item('', 0, '');
   @Input() existingItem: Item|Container|null = null;
   @Input() parent: Carrier | Container | null = null;
   @ViewChildren('formInput') inputs!: QueryList<ElementRef>;
@@ -29,7 +30,7 @@ export class ItemModalComponent {
   delete: string = "Bad Button"
   isContainer: boolean = false;
   itemList: Item[] = EXAMPLE_ITEMS
-  selectedItem: Item = new Item('', '', 0, '')
+  dropdownReady = false;
   get containerItem(): Container {
     return this.bufferItem as any as Container;
   }
@@ -44,8 +45,8 @@ export class ItemModalComponent {
       }
     });
     this.bufferItem = this.isContainer
-      ? this.emptyContainer
-      : this.emptyItem
+      ? this.emptyContainer.clone()
+      : this.emptyItem.clone()
     if (this.existingItem) {
       this.isContainer = this.existingItem.isContainer();
       Object.assign(this.bufferItem, this.existingItem);
@@ -59,7 +60,9 @@ export class ItemModalComponent {
   }
 
   ngAfterViewInit() {
-
+    setTimeout(() => {
+      this.dropdownReady = true;
+    });
   }
 
   saveItem() {
@@ -112,9 +115,34 @@ export class ItemModalComponent {
     }
   }
 
-  onItemSelected(item: Item) {
-    this.bufferItem = Object.assign({}, item);
+  onItemSelected(event: any) {
+    const template = event.value;
+    console.log("Selected template:", template);
+    Object.assign(this.bufferItem, template);
+    console.log("Updated bufferItem:", this.bufferItem);
   }
 
+  filterDigitsOnly(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Delete',
+      'Enter'
+    ];
 
+    const isDigit = /^[0-9]$/.test(event.key);
+
+    if (!isDigit && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+      this.provideFeedback();
+    }
+  }
+
+  provideFeedback() {
+    if (navigator.vibrate) {
+      navigator.vibrate(50); // 50ms vibration
+    }
+  }
 }

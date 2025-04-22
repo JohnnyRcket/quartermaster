@@ -51,7 +51,6 @@ export class CarrierComponent {
   }
 
   ngDoCheck() {
-    // Compare current containers with previous containers
     if (this.containers && JSON.stringify(this.carrier.items) !== JSON.stringify(this.previousItems)) {
       this.previousItems = [...this.containers];
       this.containers = this.carrier.containers(this.carrier.items);
@@ -70,7 +69,7 @@ export class CarrierComponent {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else if (isMagicBox) {
       const originalItem = event.previousContainer.data[event.previousIndex];
-      const clonedItem = Object.assign(new Item('', '', 0, ''), originalItem);
+      const clonedItem = originalItem.clone();
       clonedItem.id = uuidv4();
       event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {

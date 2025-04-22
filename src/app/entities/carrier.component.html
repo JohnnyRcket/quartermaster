@@ -9,7 +9,11 @@
         <h2 (click)="carrierModal(carrier)">{{ carrier.name }}</h2>
       </div>
       <div class="col-xl-5">
-        <h2 [ngClass]="{'overburdened' : carrier.getCurrentTotal() > carrier.capacity }" >{{ carrier ? carrier.getCurrentTotal() : 0 }} / {{ carrier ? carrier.capacity : 0 }}</h2>
+        <h2 [ngClass]="{
+    'overburdened': carrier.getCurrentTotal() > carrier.capacity,
+    'animate__animated': carrier.getCurrentTotal() > carrier.capacity,
+    'animate__shakeX': carrier.getCurrentTotal() > carrier.capacity}">
+          {{ carrier ? carrier.getCurrentTotal() : 0 }} / {{ carrier ? carrier.capacity : 0 }}</h2>
       </div>
     </div>
 
