@@ -13,6 +13,7 @@ import {Container} from './entities/container';
 import {CarrierType} from './entities/carrierType';
 import {CarrierModalComponent} from './modals/carrier-modal.component';
 import {ToolboxComponent} from './toolbox.component';
+import {ErrorToastComponent} from './modals/error-toast.component';
 
 
 @Component({
@@ -27,7 +28,8 @@ import {ToolboxComponent} from './toolbox.component';
     NgbModalModule,
     FormsModule,
     CdkDropListGroup,
-    ToolboxComponent
+    ToolboxComponent,
+    ErrorToastComponent
   ],
 
 })

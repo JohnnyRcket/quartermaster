@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {NgClass, NgForOf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
@@ -25,7 +25,8 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
     NgClass,
     CdkDrag,
     TooltipComponent,
-    TooltipDirective
+    TooltipDirective,
+    NgIf
   ],
     standalone: true
 })
@@ -65,5 +66,11 @@ export class ToolboxComponent {
       );
     }
   }
-
+  onDragStarted() {
+    this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
+  }
 }

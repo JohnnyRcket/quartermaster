@@ -1,14 +1,16 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Item} from './item';
 import { Container } from './container';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Carrier} from './carrier';
 import { v4 as uuidv4 } from 'uuid';
 import {TooltipComponent} from '../tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
+import {ErrorToastComponent} from '../modals/error-toast.component';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-container',
@@ -21,11 +23,16 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
     CdkDrag,
     NgClass,
     TooltipComponent,
-    TooltipDirective
+    TooltipDirective,
+    ErrorToastComponent,
+    NgIf
   ]
 })
 export class ContainerComponent {
   @Input() container!: Container;
+  @Input() parent!: Carrier;
+  @ViewChild(ErrorToastComponent) errorToast!: ErrorToastComponent;
+  @ViewChildren(TooltipDirective) tooltips!: QueryList<TooltipDirective>;
   hoveredItem: any = null;
   constructor(private modalService: NgbModal) {}
 
@@ -35,11 +42,10 @@ export class ContainerComponent {
 
   onDrop(event: CdkDragDrop<any[]>) {
     const isMagicBox = event.previousContainer.id === 'magic-toolbox';
-    if (event.container.element.nativeElement.classList.contains("container") && event.item.element.nativeElement.classList.contains("container")) {
-
-      //Todo: change this to a modal
-
-      alert('Cannot drop a Container into another Container');
+    const dragged = event.previousContainer.data[event.previousIndex];
+    this.hoveredItem = null;
+    if ('capacity' in dragged) {
+      this.errorToast.show('Cannot drop a Container into another Container');
       return;
     }
 
@@ -66,5 +72,11 @@ export class ContainerComponent {
     modalRef.componentInstance.existingItem = existingItem;
   }
 
-
+  onDragEnded() {
+    this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
+  }
 }

@@ -1,5 +1,7 @@
 <ng-template #tooltipTemplate>
-  <app-tooltip [item]="hoveredItem"></app-tooltip>
+  <ng-container *ngIf="hoveredItem">
+    <app-tooltip [item]="hoveredItem"></app-tooltip>
+  </ng-container>
 </ng-template>
 
 <div class="card bg-secondary mx-auto mb-2 dark-shadow">
@@ -35,14 +37,18 @@
             (mouseenter)="hoveredItem = item"
             (mouseleave)="hoveredItem = null"
             [tooltip]="tooltipTemplate"
+            [isOpen]="hoveredItem === item"
             container="body"
             triggers="hover"
             placement="top"
+            (cdkDragEnded)="onDragEnded()"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>
         </tr>
-        <tr (click)="openItemModal(carrier)">
+        <tr (click)="openItemModal(carrier)"
+            (mouseenter)="hoveredItem = null"
+            (mouseleave)="hoveredItem = null">
           <td class="bg-info bg-opacity-25"  >+</td>
           <td class="bg-info bg-opacity-25"  > </td>
         </tr>
@@ -54,6 +60,6 @@
     </div>
   </div>
   <div *ngFor="let container of containers">
-    <app-container [container]="container"></app-container>
+    <app-container [container]="container" [parent]="carrier" class="container"></app-container>
   </div>
 </div>
