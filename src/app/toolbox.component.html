@@ -5,12 +5,12 @@
 </ng-template>
 
 
-<div class="card bg-secondary dark-shadow">
+<div class="card bg-secondary dark-shadow" style="max-width: 100%; overflow: hidden;">
   <div class="card-body">
     <h2>Magic Box</h2>
 
 
-    <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
+    <div class="table-responsive mb-0 pb-0" style="font-size: 20px; max-width: 100%; overflow: hidden;">
       <table class="table table-hover"
              [cdkDropListData]="toolbox.items"
              (cdkDropListDropped)="onDrop($event)"
@@ -49,8 +49,10 @@
 
     <!-- Gold and EXP Input -->
     <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"
+                     class="form-control form-control-sm d-inline-block"
                      style="background-color: #ffffff; color: #000000;"></h4>
     <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"
+                    class="form-control form-control-sm d-inline-block"
                     style="background-color: #ffffff; color: #000000;"></h4>
   </div>
 </div>
