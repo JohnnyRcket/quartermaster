@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body"> <app-error-toast />
     <div class="d-flex flex-wrap align-items-end mb-3 gap-3">
       <div class="flex-fill">
         <label for="itemName" class="form-label mb-1">Name:</label>
@@ -64,7 +64,7 @@
           type="text"
           [(ngModel)]="bufferItem.name" (keydown.enter)="onEnter($event)"
           id="itemName"
-          style="background-color: white;">
+               style="background-color: #ffffff; color: #000000;">
       </div>
       <div class="flex-fill">
         <label for="itemSize" class="form-label mb-1">Size:</label>
@@ -74,7 +74,7 @@
                (keydown)="filterDigitsOnly($event)"
           [(ngModel)]="bufferItem.size" (keydown.enter)="onEnter($event)"
           id="itemSize"
-          style="background-color: white;">
+               style="background-color: #ffffff; color: #000000;">
       </div>
       <div class="flex-fill" *ngIf="isContainer">
         <label for="itemCapacity" class="form-label mb-1">Capacity:</label>
@@ -84,7 +84,7 @@
                (keydown)="filterDigitsOnly($event)"
           [(ngModel)]="containerItem.capacity" (keydown.enter)="onEnter($event)"
           id="itemCapacity"
-          style="background-color: white;">
+               style="background-color: #ffffff; color: #000000;">
       </div>
     </div>
 
@@ -95,7 +95,7 @@
         rows="4"
         [(ngModel)]="bufferItem.description" (keydown.enter)="onEnter($event)"
         id="itemDescription"
-        style="background-color: white;"></textarea>
+                style="background-color: #ffffff; color: #000000;"></textarea>
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren} from '@angular/core';
 import { Carrier } from './carrier';
 import { Item } from './item';
 import { Container } from './container';
@@ -9,7 +9,7 @@ import {
   moveItemInArray,
   transferArrayItem
 } from '@angular/cdk/drag-drop';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
@@ -18,6 +18,7 @@ import {CarrierModalComponent} from '../modals/carrier-modal.component';
 import { v4 as uuidv4 } from 'uuid';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import { TooltipComponent } from '../tooltips/tooltip.component';
+import {ErrorToastComponent} from '../modals/error-toast.component';
 
 
 @Component({
@@ -32,11 +33,13 @@ import { TooltipComponent } from '../tooltips/tooltip.component';
     ContainerComponent,
     NgClass,
     TooltipDirective,
-    TooltipComponent
+    TooltipComponent,
+    NgIf
   ]
 })
 export class CarrierComponent {
   @Input() carrier!: Carrier;
+  @ViewChildren(TooltipDirective) tooltips!: QueryList<TooltipDirective>;
   containers?: Container[];
   private previousItems: Item[] = [];
   hoveredItem: any = null;
@@ -104,10 +107,9 @@ export class CarrierComponent {
     modalRef.componentInstance.parent = parent;
     modalRef.componentInstance.isContainer = true;
   }
-  getItemTooltip(item: Item): string {
-    return `
-    <strong>${item.name}</strong>, size: ${item.size}<br>
-    <em>${item.description || ''}</em>
-  `;
+  onDragEnded() {
+    //this.tooltips.forEach(t => t.hide());
+    this.hoveredItem = null;
   }
+
 }

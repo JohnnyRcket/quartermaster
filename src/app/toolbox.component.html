@@ -1,5 +1,7 @@
 <ng-template #tooltipTemplate>
-  <app-tooltip [item]="hoveredItem"></app-tooltip>
+  <ng-container *ngIf="hoveredItem">
+    <app-tooltip [item]="hoveredItem"></app-tooltip>
+  </ng-container>
 </ng-template>
 
 
@@ -30,12 +32,15 @@
             triggers="hover"
             placement="top"
             style="position: relative;"
+            (cdkDragStarted)="onDragStarted()"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>
         </tr>
-        <tr>
-          <td class="bg-info bg-opacity-25" (click)="openItemModal(toolbox)">+</td>
+        <tr (click)="openItemModal(toolbox)"
+          (mouseenter)="hoveredItem = null"
+          (mouseleave)="hoveredItem = null">
+          <td class="bg-info bg-opacity-25">+</td>
           <td class="bg-info bg-opacity-25"></td>
         </tr>
         </tbody>
@@ -43,7 +48,9 @@
     </div>
 
     <!-- Gold and EXP Input -->
-    <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"></h4>
-    <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"></h4>
+    <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"
+                     style="background-color: #ffffff; color: #000000;"></h4>
+    <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"
+                    style="background-color: #ffffff; color: #000000;"></h4>
   </div>
 </div>

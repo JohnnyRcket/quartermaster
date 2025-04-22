@@ -1,21 +1,23 @@
-import {Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Input, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Carrier } from '../entities/carrier';
 import { CarrierType } from '../entities/carrierType';
 import { FormsModule } from '@angular/forms';
 import { ANIMALS, CHARACTERS } from '../main-page.component';
+import {ErrorToastComponent} from './error-toast.component';
 
 @Component({
   selector: 'app-carrier-modal',
   standalone: true,
   templateUrl: `./carrier-modal.component.html`,
   styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
-  imports: [FormsModule]
+  imports: [FormsModule, ErrorToastComponent]
 })
 export class CarrierModalComponent {
   @Input() existingCarrier: Carrier | null = null;
   @Input() carrierType: CarrierType = CarrierType.Tool;
   @ViewChildren('formInput') inputs!: QueryList<ElementRef>;
+  @ViewChild(ErrorToastComponent) errorToast!: ErrorToastComponent;
 
   bufferCarrier = new Carrier('', 0, [], CarrierType.Tool);
   emptyCarrier = new Carrier('', 0, [], CarrierType.Tool);
@@ -55,6 +57,10 @@ export class CarrierModalComponent {
 
   saveItem() {
     const list = this.getTargetList();
+    if (!this.bufferCarrier.name?.trim()) {
+      this.errorToast.show('Name is required');
+      return;
+    }
     if (this.existingCarrier) {
       Object.assign(this.existingCarrier, this.bufferCarrier);
     } else {

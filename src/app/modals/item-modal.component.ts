@@ -7,7 +7,7 @@ import {Container} from '../entities/container';
 import {NgIf} from '@angular/common';
 import {EXAMPLE_ITEMS} from '../example.data';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
-import {v4 as uuidv4} from 'uuid';
+import {ErrorToastComponent} from './error-toast.component';
 
 @Component({
   selector: 'app-item-modal',
@@ -15,7 +15,7 @@ import {v4 as uuidv4} from 'uuid';
   templateUrl: `./item-modal.component.html`,
   styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   imports: [
-    FormsModule, NgbModalModule, NgIf, SelectDropDownModule
+    FormsModule, NgbModalModule, NgIf, SelectDropDownModule, ErrorToastComponent
   ]
 
 })

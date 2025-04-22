@@ -1,20 +1,25 @@
 <ng-template #tooltipTemplate>
-  <app-tooltip [item]="hoveredItem"></app-tooltip>
+  <ng-container *ngIf="hoveredItem">
+    <app-tooltip [item]="hoveredItem"></app-tooltip>
+  </ng-container>
 </ng-template>
 
-
+<app-error-toast />
 <div class="card-body">
   <div class="row">
 <div class="col-xl-7">
-  <h2>{{ container.name }}</h2>
+  <h2 (click)="openItemModal(parent, container)">{{ container.name }}</h2>
 </div>
 <div class="col-xl-5">
-  <h2 [ngClass]="{'overburdened' : container.getCurrentTotal() > container.capacity }" >{{ container.getCurrentTotal() }} / {{ container.capacity }}</h2>
+  <h2 [ngClass]="{
+    'overburdened': container.getCurrentTotal() > container.capacity,
+    'animate__animated': container.getCurrentTotal() > container.capacity,
+    'animate__shakeX': container.getCurrentTotal() > container.capacity}">{{ container.getCurrentTotal() }} / {{ container.capacity }}</h2>
 </div>
   </div>
 
 <div class="table-responsive mb-0 pb-0" style="font-size: 20px;">
-  <table class="table table-hover container"
+  <table class="table table-hover item-container"
          cdkDropList
          [cdkDropListData]="container.items"
          (cdkDropListDropped)="onDrop($event)">
@@ -31,14 +36,18 @@
         (mouseenter)="hoveredItem = item"
         (mouseleave)="hoveredItem = null"
         [tooltip]="tooltipTemplate"
+        [isOpen]="hoveredItem === item"
         container="body"
         triggers="hover"
         placement="top"
+        (cdkDragEnded)="onDragEnded()"
         cdkDrag>
       <td class="bg-info bg-opacity-25">{{ item.name }}</td>
       <td class="bg-info bg-opacity-25">{{ item.size }}</td>
     </tr>
-    <tr (click)="openItemModal(container)">
+    <tr (click)="openItemModal(container)"
+        (mouseenter)="hoveredItem = null"
+        (mouseleave)="hoveredItem = null">
       <td class="bg-info bg-opacity-25">+</td>
       <td class="bg-info bg-opacity-25"> </td>
     </tr>

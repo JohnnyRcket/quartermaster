@@ -10,9 +10,8 @@ export class ThemeService {
 
   setTheme(theme: string): void {
     this.currentTheme = theme;
-    const body = document.body;
-    body.removeAttribute('data-bs-theme');
-    body.setAttribute('data-bs-theme', theme);
+    document.documentElement.setAttribute('data-bs-theme', theme);
+    document.body.setAttribute('data-bs-theme', theme);
   }
 
   getCurrentTheme(): string {
