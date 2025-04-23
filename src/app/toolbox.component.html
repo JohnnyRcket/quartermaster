@@ -48,11 +48,30 @@
     </div>
 
     <!-- Gold and EXP Input -->
-    <h4>Gold: <input type="text" placeholder="amount" [(ngModel)]="goldAmount"
-                     class="form-control form-control-sm d-inline-block"
-                     style="background-color: #ffffff; color: #000000;"></h4>
-    <h4>EXP: <input type="text" placeholder="amount" [(ngModel)]="expAmount"
-                    class="form-control form-control-sm d-inline-block"
-                    style="background-color: #ffffff; color: #000000;"></h4>
+    <h4>
+      Gold:
+      <input class="form-control-sm animate__animated"
+             type="number" inputmode="numeric"
+             pattern="[0-9]*" min="0" step="1"
+             [class.animate__shakeX]="shakeGold"
+             (keydown)="onKeyDown($event, 'gold')"
+             [(ngModel)]="goldAmount"
+             (keydown.enter)="onEnter($event)"
+             (animationend)="onAnimationEnd('gold')"
+             style="background-color: #ffffff; color: #000000;">
+    </h4>
+
+    <h4>
+      EXP:
+      <input class="form-control-sm animate__animated"
+             type="number" inputmode="numeric"
+             pattern="[0-9]*" min="0" step="1"
+             [class.animate__shakeX]="shakeExp"
+             (keydown)="onKeyDown($event, 'exp')"
+             [(ngModel)]="expAmount"
+             (keydown.enter)="onEnter($event)"
+             (animationend)="onAnimationEnd('exp')"
+             style="background-color: #ffffff; color: #000000;">
+    </h4>
   </div>
 </div>

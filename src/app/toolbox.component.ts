@@ -12,6 +12,7 @@ import {EXAMPLE_TOOLBOX} from './example.data';
 import { v4 as uuidv4 } from 'uuid';
 import {TooltipComponent} from './tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
+import {JsonService} from './services/json.service';
 
 @Component({
     selector: 'app-toolbox',
@@ -32,13 +33,17 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 })
 export class ToolboxComponent {
   toolbox: Carrier = new Carrier("Toolbox", 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
-  goldAmount = 1572;
-  expAmount = 350;
+  goldAmount: number | undefined;
+  expAmount: number | undefined;
   hoveredItem: any = null;
+  shakeGold = false;
+  shakeExp = false;
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, public json: JsonService) {}
 
   ngOnInit(){
+    this.goldAmount = this.json.activeInventory.gold;
+    this.expAmount = this.json.activeInventory.exp;
   }
 
   openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
@@ -72,5 +77,25 @@ export class ToolboxComponent {
     if (hoveredElement) {
       hoveredElement.dispatchEvent(new Event('mouseleave'));
     }
+  }
+
+  onKeyDown(event: KeyboardEvent, field: 'gold' | 'exp'): void {
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+    if (allowedKeys.includes(event.key)) return;
+
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+      if (field === 'gold') this.shakeGold = true;
+      if (field === 'exp') this.shakeExp = true;
+    }
+  }
+
+  onAnimationEnd(field: 'gold' | 'exp'): void {
+    if (field === 'gold') this.shakeGold = false;
+    if (field === 'exp') this.shakeExp = false;
+  }
+
+  onEnter(event: Event): void {
+    event.preventDefault();
   }
 }

@@ -2,7 +2,10 @@
   <!-- Title Section -->
   <div class="row"> <app-error-toast />
     <div class="col">
-      <h1 class="text-center text-danger" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">Quartermaster</h1>
+      <h1 class="text-center text-danger" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+       margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">
+        Quartermaster<span class="fs-6 align-bottom text-danger ms-2">(BETA)</span>
+      </h1>
     </div>
   </div>
   <!-- dropListGroup start -->
@@ -72,6 +75,7 @@
     <div class="col-xl-3 text-center d-flex d-lg-flex justify-content-center align-items-center justify-content-lg-center align-items-lg-center align-items-xl-end">
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openImportModal()">Import...</button>
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openExportModal()">Export...</button>
+      <button class="btn btn-danger btn-sm" type="button" style="margin-left: 25px;" (click)="reset()">RESET</button>
     </div>
     <div class="col-xl-2 d-flex d-lg-flex justify-content-center align-items-center align-items-lg-center align-items-xl-end" style="text-align: center;"><a class="d-lg-flex justify-content-lg-center align-items-lg-center" href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer" style="font-size: 15px;">Ko-fi.com/bizentine</a></div>
   </div>

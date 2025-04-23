@@ -96,4 +96,8 @@ export class MainPageComponent implements OnInit {
     console.log("theeeemes")
   }
 
+  reset() {
+    this.json.reset()
+  }
+
 }
