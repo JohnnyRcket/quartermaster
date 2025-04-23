@@ -1,21 +1,22 @@
-import {Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, QueryList, ViewChildren} from '@angular/core';
 import {Item} from '../entities/item';
 import {FormsModule} from '@angular/forms';
 import {Carrier} from '../entities/carrier';
 import {NgbActiveModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {Container} from '../entities/container';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {EXAMPLE_ITEMS} from '../example.data';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {ErrorToastComponent} from './error-toast.component';
+import { DatabaseService } from '../services/database.service';
+import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-item-modal',
   standalone: true,
   templateUrl: `./item-modal.component.html`,
-  styleUrls: ['../bootstrap/css/bootstrap.min.css', '../css/Footer-Basic-icons.css', '../css/bs-theme-overrides.css'],
   imports: [
-    FormsModule, NgbModalModule, NgIf, SelectDropDownModule, ErrorToastComponent
+    FormsModule, NgbModalModule, NgIf, SelectDropDownModule, ErrorToastComponent, NgForOf
   ]
 
 })
@@ -29,13 +30,26 @@ export class ItemModalComponent {
   title: string = "Bad Modal"
   delete: string = "Bad Button"
   isContainer: boolean = false;
-  itemList: Item[] = EXAMPLE_ITEMS
+  searchTerm = '';
+  showDropdown = false;
+  filteredItemList: (Item | Container)[] = [];
+  shakeSize = false;
+  shakeCapacity = false;
+
+
+  get itemList(): (Item | Container)[] {
+    return this.isContainer
+      ? this.db.containerTemplates
+      : [...this.db.itemTemplates, ...this.db.herbTemplates];
+  }
   dropdownReady = false;
+  shakeInput = false;
+
   get containerItem(): Container {
     return this.bufferItem as any as Container;
   }
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal, private db: DatabaseService) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -57,6 +71,8 @@ export class ItemModalComponent {
       this.title = this.isContainer ? 'New Container' : 'New Item';
       this.delete = "Clear"
     }
+    this.filteredItemList = this.itemList;
+
   }
 
   ngAfterViewInit() {
@@ -64,7 +80,45 @@ export class ItemModalComponent {
       this.dropdownReady = true;
     });
   }
+  //template logic
 
+  @HostListener('document:mousedown', ['$event'])
+  onOutsideClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.dropdown-wrapper');
+    if (!clickedInside) {
+      this.showDropdown = false;
+    }
+  }
+
+
+  filterItemList(): void {
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredItemList = this.itemList.filter(item =>
+      item.name.toLowerCase().includes(term) ||
+      (item as any).group?.toLowerCase().includes(term)
+    );
+  }
+
+  getGroup(item: Item | Container): string | null {
+    return (item as any).group ?? null;
+  }
+
+  openDropdown(): void {
+    this.showDropdown = true;
+    this.filteredItemList = this.itemList;
+  }
+
+  selectItem(item: Item | Container): void {
+    this.bufferItem = Object.assign(
+      this.isContainer ? new Container('', 0, '', 0, []) : new Item('', 0, ''),
+      item
+    );
+    this.searchTerm = item.name;
+    this.showDropdown = false;
+  }
+
+  //button logic
   saveItem() {
     if (!this.parent) return;
 
@@ -121,28 +175,21 @@ export class ItemModalComponent {
     Object.assign(this.bufferItem, template);
     console.log("Updated bufferItem:", this.bufferItem);
   }
+  onKeyDown(event: KeyboardEvent, field: 'size' | 'capacity') {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+    const isNumber = /^[0-9]$/.test(event.key);
 
-  filterDigitsOnly(event: KeyboardEvent) {
-    const allowedKeys = [
-      'Backspace',
-      'ArrowLeft',
-      'ArrowRight',
-      'Tab',
-      'Delete',
-      'Enter'
-    ];
-
-    const isDigit = /^[0-9]$/.test(event.key);
-
-    if (!isDigit && !allowedKeys.includes(event.key)) {
+    if (!isNumber && !allowedKeys.includes(event.key)) {
+      if (field === 'size') this.shakeSize = true;
+      if (field === 'capacity') this.shakeCapacity = true;
       event.preventDefault();
-      this.provideFeedback();
     }
   }
 
-  provideFeedback() {
-    if (navigator.vibrate) {
-      navigator.vibrate(50); // 50ms vibration
-    }
+
+
+  onAnimationEnd(field?: 'size' | 'capacity') {
+    if (field === 'size') this.shakeSize = false;
+    if (field === 'capacity') this.shakeCapacity = false;
   }
 }

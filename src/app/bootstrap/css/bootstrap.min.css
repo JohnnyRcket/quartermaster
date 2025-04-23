@@ -26,3 +26,15 @@
     flex: 0 0 auto !important;
   }
 }
+
+body[data-bs-theme="light"] .card,
+body[data-bs-theme="light"] .modal-content {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.06));
+  background-blend-mode: overlay;
+}
+
+body[data-bs-theme="dark"] .card,
+body[data-bs-theme="dark"] .modal-content {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06));
+  background-blend-mode: overlay;
+}

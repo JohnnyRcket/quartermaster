@@ -1,0 +1,47 @@
+<!-- port-modal.component.html -->
+
+<div class="modal-content" ngbAutofocus>
+  <div class="modal-header d-flex flex-wrap align-items-center justify-content-between">
+    <h4 class="modal-title">{{ mode === 'import' ? 'Import' : 'Export' }}</h4>
+    <button
+      class="btn-close"
+      type="button"
+      aria-label="Close"
+      (click)="close()">
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <!-- IMPORT SECTION -->
+    <div *ngIf="mode === 'import'" class="mb-4">
+      <div class="border p-3 rounded bg-light text-dark"
+           (drop)="onDrop($event)"
+           (dragover)="allowDrop($event)"
+           style="text-align: center; cursor: pointer;">
+        <p class="mb-2">Drag and drop your JSON file here</p>
+        <input type="file" accept="application/json" class="form-control" (change)="onFileSelected($event)">
+      </div>
+    </div>
+
+    <!-- EXPORT SECTION -->
+    <div *ngIf="mode === 'export'">
+      <div class="btn-group mb-2" role="group">
+        <input type="radio" class="btn-check" name="exportMode" id="pretty" autocomplete="off"
+               [checked]="exportMode === 'pretty'" (change)="setExportMode('pretty')">
+        <label class="btn btn-outline-success btn-sm" for="pretty">Pretty</label>
+
+        <input type="radio" class="btn-check" name="exportMode" id="raw" autocomplete="off"
+               [checked]="exportMode === 'raw'" (change)="setExportMode('raw')">
+        <label class="btn btn-outline-success btn-sm" for="raw">Raw JSON</label>
+      </div>
+
+      <textarea readonly class="form-control mb-2" rows="8"
+                style="background-color: #ffffff; color: #000000;">{{ exportText }}</textarea>
+      <div class="d-flex gap-2">
+      <button class="btn btn-secondary btn-sm" (click)="copyToClipboard()">Copy to Clipboard</button>
+      <button class="btn btn-secondary btn-sm" (click)="downloadExport()">Save Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
