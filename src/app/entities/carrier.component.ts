@@ -67,7 +67,6 @@ export class CarrierComponent {
     } else if (isMagicBox) {
       const originalItem = event.previousContainer.data[event.previousIndex];
       const clonedItem = originalItem.clone();
-      clonedItem.id = uuidv4();
       event.container.data.splice(event.currentIndex, 0, clonedItem);
     } else {
       transferArrayItem(
@@ -91,10 +90,12 @@ export class CarrierComponent {
     modalRef.componentInstance.existingCarrier = carrier;
   }
 
-  openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
+  openItemModal(parent: Carrier | Container, existingItem?: Item | Container) {
     const modalRef = this.modalService.open(ItemModalComponent);
     modalRef.componentInstance.parent = parent;
     modalRef.componentInstance.existingItem = existingItem;
+    modalRef.componentInstance.isContainer =
+      !!existingItem && typeof (existingItem as any).capacity === 'number';
   }
 
   openContainerModal(parent: Carrier | Container) {

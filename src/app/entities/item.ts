@@ -13,7 +13,9 @@ export class Item {
     this.description = description;
   }
 
-  isContainer(): boolean { return this.constructor.name === 'Container'; }
+  isContainer(): boolean {
+    return false;
+  }
 
   clone(): Item {
     return new Item(this.name, this.size, this.description);

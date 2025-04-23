@@ -59,8 +59,8 @@ export class TemplateService {
       if (!name || isNaN(size)) continue;
 
       const base = isContainer
-        ? Object.assign(new Container('', size, description, capacity, []), { name })
-        : Object.assign(new Item('', size, description), { name });
+        ? new Container(name, size, description, capacity, [])
+        : new Item(name, size, description);
 
       (base as any).group = currentGroup;
       result.push(base);

@@ -33,13 +33,19 @@ export class JsonService {
 
   reset() {
     this.activeInventory = {
-      characters: EXAMPLE_CARRIERS.filter(c => c.type === 'Character'),
-      animals: EXAMPLE_CARRIERS.filter(c => c.type === 'Animal'),
-      toolbox: new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool),
+      characters: EXAMPLE_CARRIERS
+        .filter(c => c.type === 'Character')
+        .map(c => this.rehydrateCarrier(c)),
+      animals: EXAMPLE_CARRIERS
+        .filter(c => c.type === 'Animal')
+        .map(c => this.rehydrateCarrier(c)),
+      toolbox: this.rehydrateCarrier(
+        new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
+      ),
       gold: 1337,
       exp: 245
     };
-    this.saveToCookies()
+    this.saveToCookies();
   }
 
   exportPrettyFormat(): string {
@@ -84,20 +90,18 @@ export class JsonService {
 
   loadData(data: any): void {
     this.activeInventory = {
-      characters: (data.characters || []).map((c: any) =>
-        new Carrier(c.name, c.capacity, (c.items || []).map((i: any) => this.parseItem(i)), CarrierType.Character)
-      ),
-      animals: (data.animals || []).map((a: any) =>
-        new Carrier(a.name, a.capacity, (a.items || []).map((i: any) => this.parseItem(i)), CarrierType.Animal)
-      ),
-      toolbox: Object.assign(new Carrier('', 0, [], CarrierType.Tool), data.toolbox),
+      characters: (data.characters || []).map((c: any) => this.rehydrateCarrier(c)),
+      animals: (data.animals || []).map((a: any) => this.rehydrateCarrier(a)),
+      toolbox: this.rehydrateCarrier(data.toolbox),
       gold: data.gold ?? 0,
       exp: data.exp ?? 0
     };
+    this.saveToCookies();
   }
 
+
   private parseItem(i: any): Item {
-    if ('items' in i && 'capacity' in i) {
+    if ('capacity' in i) {
       return new Container(i.name, i.size, i.description, i.capacity, i.items.map((sub: any) => this.parseItem(sub)));
     } else {
       return new Item(i.name, i.size, i.description);
@@ -172,4 +176,23 @@ export class JsonService {
 
     this.saveToCookies();
   }
+
+  private rehydrateItem(item: any): Item | Container {
+    if ('capacity' in item) {
+      const hydrated = new Container(item.name, item.size, item.description, item.capacity, []);
+      hydrated.items = (item.items || []).map((i: any) => this.rehydrateItem(i));
+      return hydrated;
+    }
+    return new Item(item.name, item.size, item.description);
+  }
+
+  private rehydrateCarrier(carrier: any): Carrier {
+    return new Carrier(
+      carrier.name,
+      carrier.capacity,
+      (carrier.items || []).map((i: any) => this.rehydrateItem(i)),
+      carrier.type
+    );
+  }
+
 }
