@@ -9,6 +9,8 @@ export interface PartyData {
   characters: Carrier[];
   animals: Carrier[];
   toolbox?: Carrier;
+  gold?: number;
+  exp?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -17,6 +19,8 @@ export class JsonService {
     characters: [],
     animals: [],
     toolbox: new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool),
+    gold: 0,
+    exp: 0
   };
 
   import(json: string) {
@@ -31,13 +35,21 @@ export class JsonService {
     this.activeInventory = {
       characters: EXAMPLE_CARRIERS.filter(c => c.type === 'Character'),
       animals: EXAMPLE_CARRIERS.filter(c => c.type === 'Animal'),
-      toolbox: new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
+      toolbox: new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool),
+      gold: 1337,
+      exp: 245
     };
   }
 
   exportPrettyFormat(): string {
     const data = this.activeInventory;
     const lines: string[] = [];
+
+    if (data.gold || data.exp) {
+      lines.push(`GOLD: ${data.gold ?? 0}`);
+      lines.push(`EXP: ${data.exp ?? 0}`);
+      lines.push('');
+    }
 
     const formatItem = (item: any, indent = '  ') => {
       if (item.items?.length) {
@@ -49,18 +61,25 @@ export class JsonService {
       }
     };
 
-    const processCarrier = (carrier: any, label: string) => {
-      const used = carrier.items.reduce((sum: number, i: any) => sum + i.size, 0);
-      lines.push(`${label}: ${carrier.name} (${used}/${carrier.capacity})`);
-      carrier.items.forEach((item: any) => formatItem(item));
-      lines.push('');
-    };
+    lines.push('CHARACTERS');
+    lines.push('--------------');
+    data.characters.forEach(carrier => {
+      lines.push(`${carrier.name} (${carrier.items.reduce((sum: number, i: any) => sum + i.size, 0)}/${carrier.capacity})`);
+      carrier.items.forEach((item: any) => formatItem(item, '  '));
+    });
+    lines.push('');
 
-    data.characters.forEach((c: any) => processCarrier(c, 'Character'));
-    data.animals.forEach((a: any) => processCarrier(a, 'Animal'));
+    lines.push('ANIMALS');
+    lines.push('--------------');
+    data.animals.forEach(carrier => {
+      lines.push(`${carrier.name} (${carrier.items.reduce((sum: number, i: any) => sum + i.size, 0)}/${carrier.capacity})`);
+      carrier.items.forEach((item: any) => formatItem(item, '  '));
+    });
+    lines.push('');
 
-    return lines.join('\n').trim();
+    return lines.join('\n');
   }
+
 
   loadData(data: any): void {
     this.activeInventory = {
@@ -70,7 +89,9 @@ export class JsonService {
       animals: (data.animals || []).map((a: any) =>
         new Carrier(a.name, a.capacity, (a.items || []).map((i: any) => this.parseItem(i)), CarrierType.Animal)
       ),
-      toolbox: Object.assign(new Carrier('', 0, [], CarrierType.Tool), data.toolbox)
+      toolbox: Object.assign(new Carrier('', 0, [], CarrierType.Tool), data.toolbox),
+      gold: data.gold ?? 0,
+      exp: data.exp ?? 0
     };
   }
 
@@ -107,8 +128,9 @@ export class JsonService {
     return {
       characters: this.activeInventory.characters.map(c => this.exportCarrier(c)),
       animals: this.activeInventory.animals.map(a => this.exportCarrier(a)),
-      toolbox: this.activeInventory.toolbox?.items.map(i => this.exportItem(i)) ?? []
-
+      toolbox: this.activeInventory.toolbox?.items.map(i => this.exportItem(i)) ?? [],
+      gold: this.activeInventory.gold,
+      exp: this.activeInventory.exp
     };
   }
 
