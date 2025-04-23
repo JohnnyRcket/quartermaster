@@ -1,7 +1,7 @@
 // port-modal.component.ts
 import {Component, ViewChild} from '@angular/core';
-import { JsonService } from '../services/json.service';
-import { CommonModule } from '@angular/common';
+import {JsonService} from '../services/json.service';
+import {CommonModule} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ErrorToastComponent} from './error-toast.component';
 

@@ -5,11 +5,9 @@ import {Carrier} from '../entities/carrier';
 import {NgbActiveModal, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {Container} from '../entities/container';
 import {NgForOf, NgIf} from '@angular/common';
-import {EXAMPLE_ITEMS} from '../example.data';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {ErrorToastComponent} from './error-toast.component';
-import { TemplateService } from '../services/template.service';
-import { provideHttpClient } from '@angular/common/http';
+import {TemplateService} from '../services/template.service';
 import {JsonService} from '../services/json.service';
 
 @Component({
