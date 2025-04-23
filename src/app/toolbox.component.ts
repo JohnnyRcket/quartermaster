@@ -32,18 +32,39 @@ import {JsonService} from './services/json.service';
     standalone: true
 })
 export class ToolboxComponent {
-  toolbox: Carrier = new Carrier("Toolbox", 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
-  goldAmount: number | undefined;
-  expAmount: number | undefined;
   hoveredItem: any = null;
   shakeGold = false;
   shakeExp = false;
 
+  get toolbox(): Carrier {
+    return this.json.activeInventory.toolbox ?? new Carrier('Toolbox', 0, [], CarrierType.Tool);
+  }
+  get gold(): number {
+    return this.json.activeInventory.gold ?? 0;
+  }
+
+  set gold(value: number) {
+    if (this.json.activeInventory.toolbox) {
+      this.json.activeInventory.gold = value;
+      this.json.saveToCookies();
+    }
+  }
+
+  get exp(): number {
+    return this.json.activeInventory.exp ?? 0;
+  }
+
+  set exp(value: number) {
+    if (this.json.activeInventory.toolbox) {
+      this.json.activeInventory.exp = value;
+      this.json.saveToCookies();
+    }
+  }
+
   constructor(private modalService: NgbModal, public json: JsonService) {}
 
   ngOnInit(){
-    this.goldAmount = this.json.activeInventory.gold;
-    this.expAmount = this.json.activeInventory.exp;
+
   }
 
   openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
