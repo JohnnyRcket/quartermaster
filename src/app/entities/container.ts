@@ -16,4 +16,8 @@ export class Container extends Item {
   override clone(): Container {
     return new Container(this.name, this.size, this.description, this.capacity, []);
   }
+
+  override isContainer(): boolean {
+    return true;
+  }
 }

@@ -109,8 +109,10 @@ export class ItemModalComponent {
   }
 
   selectItem(item: Item | Container): void {
+    const isContainerItem = 'capacity' in item;
+    this.isContainer = isContainerItem;
     this.bufferItem = Object.assign(
-      this.isContainer ? new Container('', 0, '', 0, []) : new Item('', 0, ''),
+      isContainerItem ? new Container('', 0, '', 0, []) : new Item('', 0, ''),
       item
     );
     this.searchTerm = item.name;
