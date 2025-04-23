@@ -39,6 +39,7 @@ export class JsonService {
       gold: 1337,
       exp: 245
     };
+    this.saveToCookies()
   }
 
   exportPrettyFormat(): string {

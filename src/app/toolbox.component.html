@@ -55,7 +55,7 @@
              pattern="[0-9]*" min="0" step="1"
              [class.animate__shakeX]="shakeGold"
              (keydown)="onKeyDown($event, 'gold')"
-             [(ngModel)]="goldAmount"
+             [(ngModel)]="gold"
              (keydown.enter)="onEnter($event)"
              (animationend)="onAnimationEnd('gold')"
              style="background-color: #ffffff; color: #000000;">
@@ -68,7 +68,7 @@
              pattern="[0-9]*" min="0" step="1"
              [class.animate__shakeX]="shakeExp"
              (keydown)="onKeyDown($event, 'exp')"
-             [(ngModel)]="expAmount"
+             [(ngModel)]="exp"
              (keydown.enter)="onEnter($event)"
              (animationend)="onAnimationEnd('exp')"
              style="background-color: #ffffff; color: #000000;">
