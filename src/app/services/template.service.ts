@@ -5,7 +5,7 @@ import { Item } from '../entities/item';
 import { Container } from '../entities/container';
 
 @Injectable({ providedIn: 'root' })
-export class DatabaseService {
+export class TemplateService {
   itemTemplates: Item[] = [];
   containerTemplates: Container[] = [];
   herbTemplates: Item[] = [];
@@ -51,14 +51,16 @@ export class DatabaseService {
 
       const name = row[1]?.toString().trim();
       const size = parseInt(row[3]);
+      const capacity = isContainer ? parseInt(row[4]) || 0 : 0;
       const descriptionParts = row.slice(4).filter(Boolean).map(v => v.toString().trim());
-      const description = descriptionParts.join(' - ');
+      const descStart = isContainer ? 5 : 4;
+      const description = row.slice(descStart).filter(x => x).join(' - ');
 
       if (!name || isNaN(size)) continue;
 
       const base = isContainer
-        ? Object.assign(new Container('', 0, '', 0, []), { name, size, description })
-        : Object.assign(new Item('', 0, ''), { name, size, description });
+        ? Object.assign(new Container('', size, description, capacity, []), { name })
+        : Object.assign(new Item('', size, description), { name });
 
       (base as any).group = currentGroup;
       result.push(base);

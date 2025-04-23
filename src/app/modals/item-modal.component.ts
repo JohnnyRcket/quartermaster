@@ -8,8 +8,9 @@ import {NgForOf, NgIf} from '@angular/common';
 import {EXAMPLE_ITEMS} from '../example.data';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {ErrorToastComponent} from './error-toast.component';
-import { DatabaseService } from '../services/database.service';
+import { TemplateService } from '../services/template.service';
 import { provideHttpClient } from '@angular/common/http';
+import {JsonService} from '../services/json.service';
 
 @Component({
   selector: 'app-item-modal',
@@ -49,7 +50,7 @@ export class ItemModalComponent {
     return this.bufferItem as any as Container;
   }
 
-  constructor(public activeModal: NgbActiveModal, private db: DatabaseService) {}
+  constructor(public activeModal: NgbActiveModal, private db: TemplateService, private json: JsonService) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -127,7 +128,7 @@ export class ItemModalComponent {
     } else {
       this.parent.items.push(this.bufferItem);
     }
-
+    this.json.saveToCookies();
     this.close();
   }
 

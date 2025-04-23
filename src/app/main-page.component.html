@@ -16,7 +16,7 @@
               (click)="openCharacterModal()">New</button>
           </div>
       </div>
-      <div *ngFor="let character of characters; let i = index">
+      <div *ngFor="let character of json.activeInventory.characters; let i = index">
         <app-carrier [carrier]="character" ></app-carrier>
       </div>
     </div>
@@ -29,7 +29,7 @@
                     (click)="openAnimalModal()">New</button>
           </div>
       </div>
-      <div *ngFor="let animal of animals; let i = index">
+      <div *ngFor="let animal of json.activeInventory.animals; let i = index">
         <app-carrier [carrier]="animal" ></app-carrier>
       </div>
     </div>

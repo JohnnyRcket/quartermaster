@@ -11,6 +11,7 @@ import {TooltipComponent} from '../tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {ErrorToastComponent} from '../modals/error-toast.component';
 import { ChangeDetectorRef } from '@angular/core';
+import {JsonService} from '../services/json.service';
 
 @Component({
   selector: 'app-container',
@@ -34,7 +35,7 @@ export class ContainerComponent {
   @ViewChild(ErrorToastComponent) errorToast!: ErrorToastComponent;
   @ViewChildren(TooltipDirective) tooltips!: QueryList<TooltipDirective>;
   hoveredItem: any = null;
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, private json: JsonService) {}
 
   ngOnInit(){
 
@@ -64,6 +65,7 @@ export class ContainerComponent {
         event.currentIndex
       );
     }
+    this.json.saveToCookies();
   }
 
   openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {

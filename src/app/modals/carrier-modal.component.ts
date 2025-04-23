@@ -3,8 +3,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Carrier } from '../entities/carrier';
 import { CarrierType } from '../entities/carrierType';
 import { FormsModule } from '@angular/forms';
-import { ANIMALS, CHARACTERS } from '../main-page.component';
 import {ErrorToastComponent} from './error-toast.component';
+import {JsonService} from '../services/json.service';
 
 @Component({
   selector: 'app-carrier-modal',
@@ -24,7 +24,7 @@ export class CarrierModalComponent {
   delete: string = "Bad Button";
   shakeInput = false;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal, private json: JsonService) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -65,6 +65,7 @@ export class CarrierModalComponent {
     } else {
       list.push(this.bufferCarrier);
     }
+    this.json.saveToCookies();
     this.closeModal();
   }
 
@@ -82,9 +83,9 @@ export class CarrierModalComponent {
 
   clearForm(){Object.assign(this.bufferCarrier, this.emptyCarrier);}
 
-  private getTargetList() {
-    if (this.carrierType === CarrierType.Animal) return ANIMALS;
-    if (this.carrierType === CarrierType.Character) return CHARACTERS;
+  private getTargetList(): Carrier[] {
+    if (this.carrierType === CarrierType.Animal) return this.json.activeInventory.animals;
+    if (this.carrierType === CarrierType.Character) return this.json.activeInventory.characters;
     throw new Error('Invalid carrierType for saving/deleting');
   }
 
