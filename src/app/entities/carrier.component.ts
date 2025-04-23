@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import { TooltipComponent } from '../tooltips/tooltip.component';
 import {ErrorToastComponent} from '../modals/error-toast.component';
+import {JsonService} from '../services/json.service';
 
 
 @Component({
@@ -44,7 +45,7 @@ export class CarrierComponent {
   private previousItems: Item[] = [];
   hoveredItem: any = null;
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, private json: JsonService) {}
 
   ngOnInit() {
     this.containers = [...this.carrier.containers(this.carrier.items)];
@@ -84,6 +85,7 @@ export class CarrierComponent {
       );
     }
     this.containers = [...this.carrier.containers(this.carrier.items)];
+    this.json.saveToCookies();
   }
 
   carrierModal(carrier: Carrier){

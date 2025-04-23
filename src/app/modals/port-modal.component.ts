@@ -1,51 +1,52 @@
 // port-modal.component.ts
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { JsonService } from '../services/json.service';
 import { CommonModule } from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {ErrorToastComponent} from './error-toast.component';
+
+class ErrorToastService {
+}
 
 @Component({
   selector: 'app-port-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ErrorToastComponent],
   templateUrl: './port-modal.component.html'
 })
 export class PortModalComponent {
+  @ViewChild(ErrorToastComponent) errorToast!: ErrorToastComponent;
   fileContent = '';
   exportText = '';
   exportMode: 'pretty' | 'raw' = 'pretty';
   mode: 'import' | 'export' = 'export';
+  importBuffer: string | null = null;
 
   constructor(public json: JsonService, public activeModal: NgbActiveModal) {
     this.updateExportText();
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const content = reader.result as string;
-      this.fileContent = content;
-      this.json.import(content);
-    };
-    reader.readAsText(file);
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.importBuffer = reader.result as string;
+      };
+      reader.readAsText(file);
+    }
   }
 
   onDrop(event: DragEvent) {
     event.preventDefault();
     const file = event.dataTransfer?.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const content = reader.result as string;
-      this.fileContent = content;
-      this.json.import(content);
-    };
-    reader.readAsText(file);
+    if (file && file.type === 'application/json') {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.importBuffer = reader.result as string;
+      };
+      reader.readAsText(file);
+    }
   }
 
   allowDrop(event: DragEvent) {
@@ -87,5 +88,18 @@ export class PortModalComponent {
 
     link.click();
     (window as any).URL.revokeObjectURL(url);
+  }
+
+  loadFromBuffer() {
+    if (!this.importBuffer) return;
+    try {
+      const parsed = JSON.parse(this.importBuffer);
+      this.json.loadData(parsed);
+      this.json.saveToCookies();
+      this.activeModal.dismiss('loaded');
+    } catch (e) {
+      this.errorToast.show('Failed to load: invalid JSON format');
+    }
+
   }
 }

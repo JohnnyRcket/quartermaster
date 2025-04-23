@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
 import {CarrierComponent} from './entities/carrier.component';
-import {EXAMPLE_CARRIERS} from './example.data';
+import {EXAMPLE_CARRIERS, EXAMPLE_TOOLBOX} from './example.data';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
@@ -15,6 +15,7 @@ import {CarrierModalComponent} from './modals/carrier-modal.component';
 import {ToolboxComponent} from './toolbox.component';
 import {ErrorToastComponent} from './modals/error-toast.component';
 import {PortModalComponent} from './modals/port-modal.component';
+import {JsonService} from './services/json.service';
 
 
 @Component({
@@ -36,33 +37,26 @@ import {PortModalComponent} from './modals/port-modal.component';
 })
 export class MainPageComponent implements OnInit {
   carriers: Carrier[] = EXAMPLE_CARRIERS;
-  characters: Carrier[] = CHARACTERS;
-  animals: Carrier[] = ANIMALS;
   items: Item[] = [];
   container?: Container;
-  toolBoxCarrier: Carrier = new Carrier("toolbox", 1000, [], CarrierType.Tool)
 
-  constructor(private modalService: NgbModal, private themeService: ThemeService) {}
+
+  constructor(private modalService: NgbModal, private themeService: ThemeService, public json: JsonService) {}
 
   ngOnInit() {
-    this.sortCarriers();
-    console.log('Viewport width:', window.innerWidth);
+    if (!this.json.loadFromCookies()) {
+      this.json.loadData({
+        characters: EXAMPLE_CARRIERS.filter(c => c.type === 'Character'),
+        animals: EXAMPLE_CARRIERS.filter(c => c.type === 'Animal'),
+        toolbox: new Carrier("Toolbox", 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
+      });
+    }
   }
+
 
   ngAfterViewInit() {
   }
 
-  //currently used to parse testdata, but eventually will be used for imports from json
-
-  sortCarriers() {
-    this.carriers.forEach(carrier => {
-      if (carrier.type === 'Character') {
-        CHARACTERS.push(carrier);
-      } else if (carrier.type === 'Animal') {
-        ANIMALS.push(carrier);
-      }
-    });
-  }
 
   openImportModal() {
     const modalRef = this.modalService.open(PortModalComponent, {
@@ -103,5 +97,3 @@ export class MainPageComponent implements OnInit {
   }
 
 }
-export const ANIMALS: Carrier[] = [];
-export const CHARACTERS: Carrier[] = [];
