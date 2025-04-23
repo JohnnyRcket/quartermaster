@@ -1,24 +1,17 @@
-import {Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren} from '@angular/core';
-import { Carrier } from './carrier';
-import { Item } from './item';
-import { Container } from './container';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-  moveItemInArray,
-  transferArrayItem
-} from '@angular/cdk/drag-drop';
+import {Component, Input, QueryList, SimpleChanges, ViewChildren} from '@angular/core';
+import {Carrier} from './carrier';
+import {Item} from './item';
+import {Container} from './container';
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {CarrierType} from './carrierType';
 import {CarrierModalComponent} from '../modals/carrier-modal.component';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
-import { TooltipComponent } from '../tooltips/tooltip.component';
-import {ErrorToastComponent} from '../modals/error-toast.component';
+import {TooltipComponent} from '../tooltips/tooltip.component';
 import {JsonService} from '../services/json.service';
 
 

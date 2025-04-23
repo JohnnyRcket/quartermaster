@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
-import { Item } from '../entities/item';
-import { Container } from '../entities/container';
+import {Item} from '../entities/item';
+import {Container} from '../entities/container';
 
 @Injectable({ providedIn: 'root' })
 export class TemplateService {

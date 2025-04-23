@@ -3,7 +3,7 @@ import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
 import {CarrierComponent} from './entities/carrier.component';
 import {EXAMPLE_CARRIERS, EXAMPLE_TOOLBOX} from './example.data';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
 import {ItemModalComponent} from './modals/item-modal.component';

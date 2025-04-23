@@ -1,8 +1,8 @@
 import {Component, ElementRef, Input, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Carrier } from '../entities/carrier';
-import { CarrierType } from '../entities/carrierType';
-import { FormsModule } from '@angular/forms';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Carrier} from '../entities/carrier';
+import {CarrierType} from '../entities/carrierType';
+import {FormsModule} from '@angular/forms';
 import {ErrorToastComponent} from './error-toast.component';
 import {JsonService} from '../services/json.service';
 

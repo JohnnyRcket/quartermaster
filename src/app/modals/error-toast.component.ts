@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-error-toast',
@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ErrorToastComponent {
   messages: string[] = [];
-    
+
   show(message: string) {
     if (this.messages.includes(message)) return;
 

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Item} from './entities/item';
@@ -9,7 +9,7 @@ import {CarrierType} from './entities/carrierType';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Container} from './entities/container';
 import {EXAMPLE_TOOLBOX} from './example.data';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {TooltipComponent} from './tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {JsonService} from './services/json.service';

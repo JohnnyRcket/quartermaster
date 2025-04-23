@@ -1,7 +1,7 @@
 import {Item} from './item';
 import {CarrierType} from './carrierType';
 import {Container} from './container';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 export class Carrier {
   id: string;
