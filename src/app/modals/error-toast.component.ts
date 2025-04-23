@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
       <div
-              class="toast-container position-fixed bottom-0 end-0 p-3"
+              class="toast-container position-fixed top-0 start-50 translate-middle-x pt-4"
               style="z-index: 1080"
       >
           <div
@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ErrorToastComponent {
   messages: string[] = [];
-
+    
   show(message: string) {
     if (this.messages.includes(message)) return;
 

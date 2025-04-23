@@ -14,6 +14,7 @@ import {CarrierType} from './entities/carrierType';
 import {CarrierModalComponent} from './modals/carrier-modal.component';
 import {ToolboxComponent} from './toolbox.component';
 import {ErrorToastComponent} from './modals/error-toast.component';
+import {PortModalComponent} from './modals/port-modal.component';
 
 
 @Component({
@@ -61,6 +62,20 @@ export class MainPageComponent implements OnInit {
         ANIMALS.push(carrier);
       }
     });
+  }
+
+  openImportModal() {
+    const modalRef = this.modalService.open(PortModalComponent, {
+      autoFocus: false
+    } as any);
+    modalRef.componentInstance.mode = 'import';
+  }
+
+  openExportModal() {
+    const modalRef = this.modalService.open(PortModalComponent, {
+      autoFocus: false
+    } as any);
+    modalRef.componentInstance.mode = 'export';
   }
 
   openCharacterModal() {
