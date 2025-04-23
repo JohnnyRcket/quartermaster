@@ -157,4 +157,18 @@ export class JsonService {
     }
     return base;
   }
+
+  wipeAllData(): void {
+    localStorage.removeItem('partyData');
+
+    this.activeInventory = {
+      characters: [],
+      animals: [],
+      toolbox: new Carrier("Toolbox", 42069, [], CarrierType.Tool),
+      gold: 0,
+      exp: 0,
+    };
+
+    this.saveToCookies();
+  }
 }

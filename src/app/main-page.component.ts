@@ -16,6 +16,7 @@ import {ToolboxComponent} from './toolbox.component';
 import {ErrorToastComponent} from './modals/error-toast.component';
 import {PortModalComponent} from './modals/port-modal.component';
 import {JsonService} from './services/json.service';
+import {WipeModalComponent} from './modals/wipe-modal.component';
 
 
 @Component({
@@ -98,6 +99,10 @@ export class MainPageComponent implements OnInit {
 
   reset() {
     this.json.reset()
+    this.json.saveToCookies()
   }
 
+  wipeData() {
+    const modalRef = this.modalService.open(WipeModalComponent);
+  }
 }
