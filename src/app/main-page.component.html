@@ -12,12 +12,11 @@
   <div class="row" cdkDropListGroup>
     <!-- Characters -->
     <div class="col-6 col-md-4" id="characterColumn">
-      <div class="d-flex align-items-center">
-        <span style="font-size: 30px;">Characters</span>
-          <div class="flex-grow-1 d-flex justify-content-center">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fancy-header flex-grow-1 text-center">
+          Characters</span>
             <button class="btn btn-secondary btn-sm"
               (click)="openCharacterModal()">New</button>
-          </div>
       </div>
       <div *ngFor="let character of json.activeInventory.characters; let i = index">
         <app-carrier [carrier]="character" ></app-carrier>
@@ -25,12 +24,11 @@
     </div>
     <!-- Animals -->
     <div class="col-6 col-md-4" id="animalColumn">
-      <div class="d-flex align-items-center">
-        <span style="font-size: 30px;">Animals</span>
-          <div class="flex-grow-1 d-flex justify-content-center">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fancy-header flex-grow-1 text-center">
+          Animals</span>
             <button class="btn btn-secondary btn-sm"
                     (click)="openAnimalModal()">New</button>
-          </div>
       </div>
       <div *ngFor="let animal of json.activeInventory.animals; let i = index">
         <app-carrier [carrier]="animal" ></app-carrier>
@@ -39,7 +37,9 @@
 
     <!-- Toolbox -->
     <div class="col-12 col-md-4">
-      <span style="font-size: 30px;">Toolbox</span>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fancy-header flex-grow-1 text-center">Toolbox</span>
+      </div>
       <div style="position: sticky; top: 1rem; z-index: 10;">
       <app-toolbox ></app-toolbox>
       </div>
