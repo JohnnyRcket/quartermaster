@@ -52,41 +52,57 @@ export class JsonService {
     const data = this.activeInventory;
     const lines: string[] = [];
 
-    if (data.gold || data.exp) {
+    const formatItem = (item: any, indent = '  ') => {
+      const linePrefix = `${indent}${item.size} - ${item.name}`;
+      if (item.items?.length) {
+        const used = item.items.reduce((sum: number, i: any) => sum + i.size, 0);
+        const isOverburdened = used > item.capacity;
+        const bracket = isOverburdened ? ['{', '}'] : ['(', ')'];
+        lines.push(`${linePrefix} ${bracket[0]}${used}/${item.capacity}${bracket[1]}`);
+        item.items.forEach((nested: any) => formatItem(nested, indent + '  '));
+      } else {
+        lines.push(linePrefix);
+      }
+    };
+
+    // Gold + EXP
+    if (data.gold !== '0' || data.exp !== '0') {
       lines.push(`GOLD: ${data.gold}`);
       lines.push(`EXP: ${data.exp}`);
       lines.push('');
     }
 
+    // Characters
+    if (data.characters.length > 0) {
+      lines.push('CHARACTERS');
+      lines.push('-------------');
+      data.characters.forEach(c => {
+        const used = c.items.reduce((sum: number, i: any) => sum + i.size, 0);
+        const isOverburdened = used > c.capacity;
+        const bracket = isOverburdened ? ['{', '}'] : ['(', ')'];
+        lines.push(`${c.name} ${bracket[0]}${used}/${c.capacity}${bracket[1]}`);
+        c.items.forEach(item => formatItem(item));
+        lines.push('');
+      });
+    }
 
-    const formatItem = (item: any, indent = '  ') => {
-      if (item.items?.length) {
-        const used = item.items.reduce((sum: number, i: any) => sum + i.size, 0);
-        lines.push(`${indent}- ${item.name} (${used}/${item.capacity})`);
-        item.items.forEach((nested: any) => formatItem(nested, indent + '  '));
-      } else {
-        lines.push(`${indent}- ${item.name} (${item.size})`);
-      }
-    };
-
-    lines.push('CHARACTERS');
-    lines.push('--------------');
-    data.characters.forEach(carrier => {
-      lines.push(`${carrier.name} (${carrier.items.reduce((sum: number, i: any) => sum + i.size, 0)}/${carrier.capacity})`);
-      carrier.items.forEach((item: any) => formatItem(item, '  '));
-    });
-    lines.push('');
-
-    lines.push('ANIMALS');
-    lines.push('--------------');
-    data.animals.forEach(carrier => {
-      lines.push(`${carrier.name} (${carrier.items.reduce((sum: number, i: any) => sum + i.size, 0)}/${carrier.capacity})`);
-      carrier.items.forEach((item: any) => formatItem(item, '  '));
-    });
-    lines.push('');
+    // Animals
+    if (data.animals.length > 0) {
+      lines.push('ANIMALS');
+      lines.push('-------------');
+      data.animals.forEach(a => {
+        const used = a.items.reduce((sum: number, i: any) => sum + i.size, 0);
+        const isOverburdened = used > a.capacity;
+        const bracket = isOverburdened ? ['{', '}'] : ['(', ')'];
+        lines.push(`${a.name} ${bracket[0]}${used}/${a.capacity}${bracket[1]}`);
+        a.items.forEach(item => formatItem(item));
+        lines.push('');
+      });
+    }
 
     return lines.join('\n');
   }
+
 
 
   loadData(data: any): void {
@@ -146,6 +162,7 @@ export class JsonService {
     return {
       name: c.name,
       capacity: c.capacity,
+      type: c.type,
       items: c.items.map(i => this.exportItem(i))
     };
   }
@@ -189,13 +206,19 @@ export class JsonService {
     return new Item(item.name, item.size, item.description);
   }
 
-  private rehydrateCarrier(carrier: any): Carrier {
+  rehydrateCarrier(data: any): Carrier {
+    const type = data.type ?? CarrierType.Tool; // fallback to Character just in case
+    if (!Object.values(CarrierType).includes(type)) {
+      throw new Error(`Unsupported carrier type: ${type}`);
+    }
+
     return new Carrier(
-      carrier.name,
-      carrier.capacity,
-      (carrier.items || []).map((i: any) => this.rehydrateItem(i)),
-      carrier.type
+      data.name,
+      data.capacity,
+      (data.items || []).map((i: any) => this.parseItem(i)),
+      type
     );
   }
+
 
 }

@@ -75,6 +75,7 @@ export class CarrierModalComponent {
       const index = list.indexOf(this.existingCarrier);
       if (index !== -1) {
         list.splice(index, 1);
+        this.json.saveToCookies();
         this.closeModal();
       }
     }
