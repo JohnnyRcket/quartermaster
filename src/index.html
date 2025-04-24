@@ -14,13 +14,25 @@
 
 <body>
 <script>
-  const storedTheme = localStorage.getItem('theme') || 'auto';
-  const resolvedTheme = storedTheme === 'auto'
-    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    : storedTheme;
+  (function() {
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const resolvedTheme = storedTheme === 'auto' || !storedTheme
+      ? (prefersDark ? 'dark' : 'light')
+      : storedTheme;
 
-  document.documentElement.setAttribute('data-bs-theme', resolvedTheme);
-  document.body.setAttribute('data-bs-theme', resolvedTheme);
+    document.documentElement.dataset.bsTheme = resolvedTheme;
+    document.body.dataset.bsTheme = resolvedTheme;
+
+    // background fallback based on resolved theme
+    if (resolvedTheme === 'dark') {
+      document.documentElement.style.setProperty('--bs-body-bg', '#756a72');
+      document.body.style.backgroundColor = 'var(--bs-body-bg)';
+    } else {
+      document.documentElement.style.setProperty('--bs-body-bg', '#9aeead');
+      document.body.style.backgroundColor = 'var(--bs-body-bg)';
+    }
+  })();
 </script>
 <app-root></app-root>
 
