@@ -8,8 +8,6 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {CarrierType} from './entities/carrierType';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Container} from './entities/container';
-import {EXAMPLE_TOOLBOX} from './example.data';
-import {v4 as uuidv4} from 'uuid';
 import {TooltipComponent} from './tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {JsonService} from './services/json.service';
@@ -39,32 +37,19 @@ export class ToolboxComponent {
   get toolbox(): Carrier {
     return this.json.activeInventory.toolbox ?? new Carrier('Toolbox', 0, [], CarrierType.Tool);
   }
-  get gold(): number {
-    return this.json.activeInventory.gold ?? 0;
+  get gold(): string {
+    const num = parseInt(this.json.activeInventory.gold.replace(/,/g, ''), 10);
+    return isNaN(num) ? '0' : num.toLocaleString();
   }
 
-  set gold(value: number) {
-    if (this.json.activeInventory.toolbox) {
-      this.json.activeInventory.gold = value;
-      this.json.saveToCookies();
-    }
-  }
-
-  get exp(): number {
-    return this.json.activeInventory.exp ?? 0;
-  }
-
-  set exp(value: number) {
-    if (this.json.activeInventory.toolbox) {
-      this.json.activeInventory.exp = value;
-      this.json.saveToCookies();
-    }
+  get exp(): string {
+    const num = parseInt(this.json.activeInventory.exp.replace(/,/g, ''), 10);
+    return isNaN(num) ? '0' : num.toLocaleString();
   }
 
   constructor(private modalService: NgbModal, public json: JsonService) {}
 
   ngOnInit(){
-
   }
 
   openItemModal(parent: Carrier | Container, existingItem: Item | null = null) {
@@ -115,7 +100,17 @@ export class ToolboxComponent {
     if (field === 'exp') this.shakeExp = false;
   }
 
-  onEnter(event: Event): void {
-    event.preventDefault();
+  selectInput(event: FocusEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
+  updateGoldOrExp(field: 'gold' | 'exp', input: string): void {
+    const digitsOnly = input.replace(/[^0-9]/g, '');
+    const number = parseInt(digitsOnly, 10);
+
+    this.json.activeInventory[field] = isNaN(number) ? '0' : number.toLocaleString();
+    this.json.saveToCookies();
+  }
+
+
 }
