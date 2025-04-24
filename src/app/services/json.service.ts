@@ -9,8 +9,8 @@ export interface PartyData {
   characters: Carrier[];
   animals: Carrier[];
   toolbox?: Carrier;
-  gold?: number;
-  exp?: number;
+  gold: string;
+  exp: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -19,8 +19,8 @@ export class JsonService {
     characters: [],
     animals: [],
     toolbox: new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool),
-    gold: 0,
-    exp: 0
+    gold: '1,337',
+    exp: '245'
   };
 
   import(json: string) {
@@ -42,8 +42,8 @@ export class JsonService {
       toolbox: this.rehydrateCarrier(
         new Carrier('Toolbox', 42069, [EXAMPLE_TOOLBOX], CarrierType.Tool)
       ),
-      gold: 1337,
-      exp: 245
+      gold: '1,337',
+      exp: '245'
     };
     this.saveToCookies();
   }
@@ -53,10 +53,11 @@ export class JsonService {
     const lines: string[] = [];
 
     if (data.gold || data.exp) {
-      lines.push(`GOLD: ${data.gold ?? 0}`);
-      lines.push(`EXP: ${data.exp ?? 0}`);
+      lines.push(`GOLD: ${data.gold}`);
+      lines.push(`EXP: ${data.exp}`);
       lines.push('');
     }
+
 
     const formatItem = (item: any, indent = '  ') => {
       if (item.items?.length) {
@@ -89,12 +90,14 @@ export class JsonService {
 
 
   loadData(data: any): void {
+    const existingToolbox = this.activeInventory.toolbox ?? new Carrier('Toolbox', 42069, [], CarrierType.Tool);
+    existingToolbox.items = (data.toolbox || []).map((i: any) => this.parseItem(i));
     this.activeInventory = {
       characters: (data.characters || []).map((c: any) => this.rehydrateCarrier(c)),
       animals: (data.animals || []).map((a: any) => this.rehydrateCarrier(a)),
-      toolbox: this.rehydrateCarrier(data.toolbox),
-      gold: data.gold ?? 0,
-      exp: data.exp ?? 0
+      toolbox: existingToolbox,
+      gold: data.gold ?? '0',
+      exp: data.exp ?? '0'
     };
     this.saveToCookies();
   }
@@ -170,8 +173,8 @@ export class JsonService {
       characters: [],
       animals: [],
       toolbox: new Carrier("Toolbox", 42069, [], CarrierType.Tool),
-      gold: 0,
-      exp: 0,
+      gold: "0",
+      exp: "0",
     };
 
     this.saveToCookies();
