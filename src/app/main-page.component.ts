@@ -98,11 +98,12 @@ export class MainPageComponent implements OnInit {
   }
 
   reset() {
-    this.json.reset()
-    this.json.saveToCookies()
+    const modalRef = this.modalService.open(WipeModalComponent);
+    modalRef.componentInstance.mode = 'reset';
   }
 
   wipeData() {
     const modalRef = this.modalService.open(WipeModalComponent);
+    modalRef.componentInstance.mode = 'wipe';
   }
 }
