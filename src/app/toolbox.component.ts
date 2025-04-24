@@ -38,12 +38,12 @@ export class ToolboxComponent {
     return this.json.activeInventory.toolbox ?? new Carrier('Toolbox', 0, [], CarrierType.Tool);
   }
   get gold(): string {
-    const num = parseInt(this.json.activeInventory.gold.replace(/,/g, ''), 10);
+    const num = parseInt((this.json.activeInventory.gold + '').replace(/,/g, ''), 10);
     return isNaN(num) ? '0' : num.toLocaleString();
   }
 
   get exp(): string {
-    const num = parseInt(this.json.activeInventory.exp.replace(/,/g, ''), 10);
+    const num = parseInt((this.json.activeInventory.exp + '').replace(/,/g, ''), 10);
     return isNaN(num) ? '0' : num.toLocaleString();
   }
 

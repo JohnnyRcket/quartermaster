@@ -24,11 +24,16 @@ export class JsonService {
   };
 
   import(json: string) {
-    this.activeInventory = JSON.parse(json);
+    try {
+      const data = JSON.parse(json);
+      this.loadData(data);
+    } catch (e) {
+      console.warn('Import failed:', e);
+    }
   }
 
   export(): string {
-    return JSON.stringify(this.activeInventory, null, 2);
+    return JSON.stringify(this.exportRawFormat(), null, 2);
   }
 
   reset() {
@@ -107,7 +112,15 @@ export class JsonService {
 
   loadData(data: any): void {
     const existingToolbox = this.activeInventory.toolbox ?? new Carrier('Toolbox', 42069, [], CarrierType.Tool);
-    existingToolbox.items = (data.toolbox || []).map((i: any) => this.parseItem(i));
+
+    const toolboxItems = Array.isArray(data.toolbox)
+      ? data.toolbox
+      : Array.isArray(data.toolbox?.items)
+        ? data.toolbox.items
+        : [];
+
+    existingToolbox.items = toolboxItems.map((i: any) => this.parseItem(i));
+
     this.activeInventory = {
       characters: (data.characters || []).map((c: any) => this.rehydrateCarrier(c)),
       animals: (data.animals || []).map((a: any) => this.rehydrateCarrier(a)),
@@ -115,8 +128,10 @@ export class JsonService {
       gold: data.gold ?? '0',
       exp: data.exp ?? '0'
     };
+
     this.saveToCookies();
   }
+
 
 
   private parseItem(i: any): Item {
@@ -129,20 +144,19 @@ export class JsonService {
 
   saveToCookies(): void {
     const data = this.exportRawFormat();
-    const encoded = encodeURIComponent(JSON.stringify(data));
-    document.cookie = `partyData=${encoded}; path=/; max-age=31536000`; // 1 year
+    localStorage.setItem('partyData', JSON.stringify(data));
   }
 
+
   loadFromCookies(): boolean {
-    const match = document.cookie.match(/(?:^|; )partyData=([^;]*)/);
-    if (match) {
+    const raw = localStorage.getItem('partyData');
+    if (raw) {
       try {
-        const decoded = decodeURIComponent(match[1]);
-        const parsed = JSON.parse(decoded);
+        const parsed = JSON.parse(raw);
         this.loadData(parsed);
         return true;
       } catch {
-        console.warn('Invalid or corrupt cookie, ignoring.');
+        console.warn('Invalid or corrupt localStorage, ignoring.');
       }
     }
     return false;
