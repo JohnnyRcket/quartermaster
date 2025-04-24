@@ -42,7 +42,7 @@ export class MainPageComponent implements OnInit {
   container?: Container;
 
 
-  constructor(private modalService: NgbModal, private themeService: ThemeService, public json: JsonService) {}
+  constructor(private modalService: NgbModal, public themeService: ThemeService, public json: JsonService) {}
 
   ngOnInit() {
     if (!this.json.loadFromCookies()) {
