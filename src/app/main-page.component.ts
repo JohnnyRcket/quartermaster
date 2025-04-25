@@ -3,7 +3,7 @@ import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
 import {CarrierComponent} from './entities/carrier.component';
 import {EXAMPLE_CARRIERS, EXAMPLE_TOOLBOX} from './example.data';
-import {NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
 import {ItemModalComponent} from './modals/item-modal.component';
@@ -32,7 +32,12 @@ import {WipeModalComponent} from './modals/wipe-modal.component';
     FormsModule,
     CdkDropListGroup,
     ToolboxComponent,
-    ErrorToastComponent
+    ErrorToastComponent,
+    NgIf,
+    NgClass,
+    NgSwitchDefault,
+    NgSwitchCase,
+    NgSwitch
   ],
 
 })
@@ -40,6 +45,11 @@ export class MainPageComponent implements OnInit {
   carriers: Carrier[] = EXAMPLE_CARRIERS;
   items: Item[] = [];
   container?: Container;
+
+  get currentTheme(): string {
+    return this.themeService.currentTheme;
+  }
+
 
 
   constructor(private modalService: NgbModal, public themeService: ThemeService, public json: JsonService) {}
@@ -56,6 +66,7 @@ export class MainPageComponent implements OnInit {
 
 
   ngAfterViewInit() {
+    this.themeService.reassertTheme();
   }
 
 
@@ -106,4 +117,6 @@ export class MainPageComponent implements OnInit {
     const modalRef = this.modalService.open(WipeModalComponent);
     modalRef.componentInstance.mode = 'wipe';
   }
+
+
 }
