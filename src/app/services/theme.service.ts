@@ -4,17 +4,33 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class ThemeService {
-  private currentTheme: string = 'dark';
+  public currentTheme: string = 'dark';
 
   constructor() {}
 
   setTheme(theme: string): void {
     this.currentTheme = theme;
-    document.documentElement.setAttribute('data-bs-theme', theme);
-    document.body.setAttribute('data-bs-theme', theme);
+
+    const resolved =
+      theme === 'auto'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : theme;
+
+    document.documentElement.setAttribute('data-bs-theme', resolved);
+    document.body.setAttribute('data-bs-theme', resolved);
+
+    localStorage.setItem('theme', theme);
   }
+
 
   getCurrentTheme(): string {
     return this.currentTheme;
+  }
+
+  reassertTheme(): void {
+    document.documentElement.setAttribute('data-bs-theme', this.currentTheme);
+    document.body.setAttribute('data-bs-theme', this.currentTheme);
   }
 }
