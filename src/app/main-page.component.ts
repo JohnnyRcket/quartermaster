@@ -33,7 +33,6 @@ import {WipeModalComponent} from './modals/wipe-modal.component';
     CdkDropListGroup,
     ToolboxComponent,
     ErrorToastComponent,
-    NgIf,
     NgClass,
     NgSwitchDefault,
     NgSwitchCase,

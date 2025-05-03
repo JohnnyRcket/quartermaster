@@ -1,7 +1,7 @@
 // port-modal.component.ts
 import {Component, ViewChild} from '@angular/core';
 import {JsonService} from '../services/json.service';
-import {CommonModule} from '@angular/common';
+import {CommonModule, formatDate} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ErrorToastComponent} from './error-toast.component';
 
@@ -84,7 +84,8 @@ export class PortModalComponent {
     link.href = url;
 
     const extension = this.exportMode === 'pretty' ? 'txt' : 'json';
-    link.download = `inventory-export.${extension}`;
+    const dateTime: string = formatDate(Date.now(), 'yyyy-MM-dd', 'en-US')
+    link.download = `${this.exportMode}-inventory-export-${dateTime}.${extension}`;
 
     link.click();
     (window as any).URL.revokeObjectURL(url);
