@@ -43,7 +43,9 @@
         (cdkDragEnded)="onDragEnded()"
         cdkDrag>
       <td class="bg-info bg-opacity-25">{{ item.name }}</td>
-      <td class="bg-info bg-opacity-25">{{ item.size }}</td>
+      <td class="bg-info bg-opacity-25" style="white-space: nowrap;">{{ item.size }}
+        <span *ngIf="item.quantity > 1" class="badge bg-secondary badge-quantity" style="font-size: 0.75rem;">(x{{ item.quantity }})</span>
+      </td>
     </tr>
     <tr (click)="openItemModal(container)"
         (mouseenter)="hoveredItem = null"

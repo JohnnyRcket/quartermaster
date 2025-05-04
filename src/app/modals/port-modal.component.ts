@@ -1,4 +1,3 @@
-// port-modal.component.ts
 import {Component, ViewChild} from '@angular/core';
 import {JsonService} from '../services/json.service';
 import {CommonModule, formatDate} from '@angular/common';

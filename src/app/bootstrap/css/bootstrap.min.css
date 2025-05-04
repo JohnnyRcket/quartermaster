@@ -58,6 +58,9 @@ body[data-bs-theme="dark"] .modal-content {
   --bs-btn-color: #000 !important;
 }
 
-
+.badge-quantity {
+  color: var(--bs-body-color) !important;
+  opacity: 1 !important;
+}
 
 

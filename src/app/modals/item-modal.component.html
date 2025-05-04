@@ -72,75 +72,53 @@
 
   <div class="modal-body"> <app-error-toast />
     <!-- Name (always shown), Size inline if item -->
-    <div class="d-flex gap-3 align-items-center w-100 mb-2">
-      <div class="d-flex align-items-center flex-fill gap-2">
-        <label for="itemName" class="form-label mb-0">Name:</label>
-        <input #formInput class="form-control-sm w-100"
-               id="itemName"
-               [(ngModel)]="bufferItem.name"
-               style="background-color: #ffffff; color: #000000;">
-      </div>
+    <!-- Name on its own line -->
+    <div class="w-100 mb-2">
+      <label for="itemName" class="form-label mb-0">Name:</label>
+      <input #formInput class="form-control-sm w-100"
+             id="itemName"
+             [(ngModel)]="bufferItem.name"
+             style="background-color: #ffffff; color: #000000;">
+    </div>
 
-      <!-- Size (only for non-containers) -->
-      <div class="d-flex align-items-center flex-fill gap-2" *ngIf="!isContainer">
+    <!-- Size and Quantity/Capacity (depending on item or container) -->
+    <div class="d-flex justify-content-between gap-3 w-100 mb-2">
+      <div class="d-flex align-items-center flex-fill gap-2">
         <label for="itemSize" class="form-label mb-0">Size:</label>
-        <input #formInput class="form-control-sm animate__animated w-100"
-               type="number" inputmode="numeric"
-               pattern="[0-9]*" min="0" step="1"
-               [class.animate__shakeX]="shakeSize"
-               (keydown)="onKeyDown($event, 'size')"
+        <input #formInput class="form-control-sm w-100" id="itemSize"
+               type="number" inputmode="numeric" min="0" step="1"
                [(ngModel)]="bufferItem.size"
-               (keydown.enter)="onEnter($event)"
-               (animationend)="onAnimationEnd('size')"
                style="background-color: #ffffff; color: #000000;">
       </div>
-    </div>
 
-
-
-    <!-- If container, show Size + Capacity inline -->
-    <div class="d-flex w-100 justify-content-between gap-3 align-items-center" *ngIf="isContainer">
-      <div class="d-flex align-items-center flex-fill gap-2">
-        <label for="itemSize" class="form-label mb-0">Size: </label>
-        <input #formInput class="form-control-sm animate__animated w-100"
-               type="number" inputmode="numeric" id="itemSize"
-               pattern="[0-9]*" min="0" step="1"
-               [class.animate__shakeX]="shakeSize"
-               (keydown)="onKeyDown($event, 'size')"
-               [(ngModel)]="bufferItem.size"
-               (keydown.enter)="onEnter($event)"
-               (animationend)="onAnimationEnd('size')"
-               style="background-color: #ffffff; color: #000000;">
-      </div>
-      <div class="d-flex align-items-center flex-fill gap-2">
-        <label for="itemCapacity" class="form-label mb-0">Capacity: </label>
-        <input #formInput class="form-control-sm animate__animated w-100"
-               type="number" inputmode="numeric" id="itemCapacity"
-               pattern="[0-9]*" min="0" step="1"
-               [class.animate__shakeX]="shakeCapacity"
-               (keydown)="onKeyDown($event, 'capacity')"
+      <div class="d-flex align-items-center flex-fill gap-2" *ngIf="isContainer">
+        <label for="itemCapacity" class="form-label mb-0">Capacity:</label>
+        <input #formInput class="form-control-sm w-100" id="itemCapacity"
+               type="number" inputmode="numeric" min="0" step="1"
                [(ngModel)]="containerItem.capacity"
-               (keydown.enter)="onEnter($event)"
-               (animationend)="onAnimationEnd('capacity')"
+               style="background-color: #ffffff; color: #000000;">
+      </div>
+
+      <div class="d-flex align-items-center flex-fill gap-2" *ngIf="!isContainer">
+        <label for="itemQuantity" class="form-label mb-0">Quantity:</label>
+        <input #formInput class="form-control-sm w-100" id="itemQuantity"
+               type="number" inputmode="numeric" min="1" step="1"
+               [(ngModel)]="bufferItem.quantity"
                style="background-color: #ffffff; color: #000000;">
       </div>
     </div>
 
-
-
-
-
-
-      <div class="w-100">
-        <label for="itemDescription" class="form-label mb-1">Description:</label>
-        <textarea #formInput class="form-control animate__animated w-100"
-                  id="itemDescription"
-                  [(ngModel)]="bufferItem.description"
-                  style="background-color: #ffffff; color: #000000; min-height: 100px;"></textarea>
-      </div>
+    <!-- Description on its own line -->
+    <div class="w-100">
+      <label for="itemDescription" class="form-label mb-1">Description:</label>
+      <textarea #formInput class="form-control w-100"
+                id="itemDescription"
+                [(ngModel)]="bufferItem.description"
+                style="background-color: #ffffff; color: #000000; min-height: 100px;"></textarea>
+    </div>
   </div>
 
-  <div class="modal-footer justify-content-center">
+    <div class="modal-footer justify-content-center">
     <button class="btn btn-secondary" type="button" (click)="saveItem()">Save</button>
     <button class="btn btn-secondary" type="button" (click)="deleteItem()">{{ delete }}</button>
     <button class="btn btn-secondary" type="button" (click)="close()">Close</button>

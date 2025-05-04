@@ -19,7 +19,7 @@ export class Carrier {
   }
 
   getCurrentTotal(): number {
-    return this.items.reduce((sum, item) => sum + item.size, 0);
+    return this.items.reduce((sum, item) => sum + item.size * item.quantity, 0);
   }
 
   containers(items: Item[]): Container[] {

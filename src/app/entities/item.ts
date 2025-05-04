@@ -5,12 +5,14 @@ export class Item {
   name: string;
   size: number;
   description: string;
+  quantity: number;
 
-  constructor(name: string, size: number, description: string) {
+  constructor(name: string, size: number, description: string, quantity?: number) {
     this.id = uuidv4();
     this.name = name;
     this.size = size;
     this.description = description;
+    this.quantity = quantity ?? 1;
   }
 
   isContainer(): boolean {
@@ -18,6 +20,6 @@ export class Item {
   }
 
   clone(): Item {
-    return new Item(this.name, this.size, this.description);
+    return new Item(this.name, this.size, this.description, this.quantity);
   }
 }
