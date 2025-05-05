@@ -33,6 +33,7 @@
             placement="top"
             style="position: relative;"
             (cdkDragStarted)="onDragStarted()"
+            (cdkDragEnded)="onDragEnded()"
             cdkDrag>
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>

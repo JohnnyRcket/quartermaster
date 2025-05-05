@@ -75,6 +75,7 @@ export class ToolboxComponent {
         event.currentIndex
       );
     }
+    this.json.saveToCookies();
   }
   onDragStarted() {
     this.hoveredItem = null;
@@ -112,5 +113,9 @@ export class ToolboxComponent {
     this.json.saveToCookies();
   }
 
+  onDragEnded() {
+    //this.tooltips.forEach(t => t.hide());
+    this.hoveredItem = null;
+  }
 
 }
