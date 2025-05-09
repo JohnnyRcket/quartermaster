@@ -14,6 +14,7 @@
       <table class="table table-hover"
              [cdkDropListData]="toolbox.items"
              (cdkDropListDropped)="onDrop($event)"
+             [cdkDropListAutoScrollStep]="10"
              cdkDropList id="magic-toolbox">
         <thead>
         <tr>
@@ -34,7 +35,8 @@
             style="position: relative;"
             (cdkDragStarted)="onDragStarted()"
             (cdkDragEnded)="onDragEnded()"
-            cdkDrag>
+            cdkDrag
+            [cdkDragStartDelay]="{ touch: 200, mouse: 0 }">
           <td class="bg-info bg-opacity-25">{{ item.name }}</td>
           <td class="bg-info bg-opacity-25">{{ item.size }}</td>
         </tr>

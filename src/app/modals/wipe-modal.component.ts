@@ -18,8 +18,8 @@ import { JsonService } from '../services/json.service';
         <ng-container *ngIf="mode === 'wipe'; else resetContent">
             <div class="text-start text-center">
                 <span class="d-inline">
-                Are you <span class="text-danger fw-bold">absolutely sure</span>?<br>
-                This will erase <span class="text-danger fw-bold">all data</span> and clear cookies.
+                Are you <span class="text-danger fw-bold">ABSOLUTELY SURE</span>?<br>
+                This will erase <span class="text-danger fw-bold">ALL DATA</span> and clear cookies.
                 </span>
             </div>
         </ng-container>
