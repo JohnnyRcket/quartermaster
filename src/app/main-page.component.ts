@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Item} from './entities/item';
 import {Carrier} from './entities/carrier';
 import {CarrierComponent} from './entities/carrier.component';
 import {EXAMPLE_CARRIERS, EXAMPLE_TOOLBOX} from './example.data';
-import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {NgClass, NgForOf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CdkDropListGroup} from '@angular/cdk/drag-drop';
 import {ItemModalComponent} from './modals/item-modal.component';
@@ -17,6 +17,8 @@ import {ErrorToastComponent} from './modals/error-toast.component';
 import {PortModalComponent} from './modals/port-modal.component';
 import {JsonService} from './services/json.service';
 import {WipeModalComponent} from './modals/wipe-modal.component';
+import {TooltipDirective} from 'ngx-bootstrap/tooltip';
+import { ThemeSwitcherComponent } from './theme-switch.component';
 
 
 @Component({
@@ -33,10 +35,8 @@ import {WipeModalComponent} from './modals/wipe-modal.component';
     CdkDropListGroup,
     ToolboxComponent,
     ErrorToastComponent,
-    NgClass,
-    NgSwitchDefault,
-    NgSwitchCase,
-    NgSwitch
+    TooltipDirective,
+    ThemeSwitcherComponent
   ],
 
 })
@@ -67,7 +67,6 @@ export class MainPageComponent implements OnInit {
   ngAfterViewInit() {
     this.themeService.reassertTheme();
   }
-
 
   openImportModal() {
     const modalRef = this.modalService.open(PortModalComponent, {
@@ -107,14 +106,8 @@ export class MainPageComponent implements OnInit {
     console.log("theeeemes")
   }
 
-  reset() {
-    const modalRef = this.modalService.open(WipeModalComponent);
-    modalRef.componentInstance.mode = 'reset';
-  }
-
   wipeData() {
     const modalRef = this.modalService.open(WipeModalComponent);
-    modalRef.componentInstance.mode = 'wipe';
   }
 
 

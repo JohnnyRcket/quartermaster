@@ -2,14 +2,20 @@ import {Component, Input, QueryList, SimpleChanges, ViewChildren} from '@angular
 import {Carrier} from './carrier';
 import {Item} from './item';
 import {Container} from './container';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ContainerComponent} from './container.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {CarrierType} from './carrierType';
 import {CarrierModalComponent} from '../modals/carrier-modal.component';
-import {v4 as uuidv4} from 'uuid';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {TooltipComponent} from '../tooltips/tooltip.component';
 import {JsonService} from '../services/json.service';
@@ -28,7 +34,8 @@ import {JsonService} from '../services/json.service';
     NgClass,
     TooltipDirective,
     TooltipComponent,
-    NgIf
+    NgIf,
+    CdkDragHandle
   ]
 })
 export class CarrierComponent {
@@ -103,9 +110,12 @@ export class CarrierComponent {
     modalRef.componentInstance.parent = parent;
     modalRef.componentInstance.isContainer = true;
   }
-  onDragEnded() {
-    //this.tooltips.forEach(t => t.hide());
-    this.hoveredItem = null;
-  }
 
+   onDragEnded() {
+    this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
+  }
 }

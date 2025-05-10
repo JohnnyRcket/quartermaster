@@ -12,29 +12,19 @@ import { JsonService } from '../services/json.service';
   template: `
     <div class="modal-content" ngbAutofocus>
       <div class="modal-header">
-        <h5 class="modal-title fancy-header">{{ mode === 'wipe' ? 'Confirm Wipe' : 'Reset to Demo Data' }}</h5>
+        <h5 class="modal-title fancy-header">Confirm Wipe</h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
       </div>
-        <ng-container *ngIf="mode === 'wipe'; else resetContent">
             <div class="text-start text-center">
                 <span class="d-inline">
                 Are you <span class="text-danger fw-bold">ABSOLUTELY SURE</span>?<br>
                 This will erase <span class="text-danger fw-bold">ALL DATA</span> and clear cookies.
                 </span>
             </div>
-        </ng-container>
-        <ng-template #resetContent>
-            <div class="text-start text-center">
-                <span class="d-inline">
-                This will <span class="text-danger fw-bold">REPLACE</span> all data (including cookies) with
-                <span class="text-danger fw-bold">DEMO DATA</span>.</span>
-                <br>Existing content will be lost.</div>
-        </ng-template>
         <div class="modal-footer d-flex justify-content-center gap-2">
         <button type="button" class="btn btn-secondary btn-sm" (click)="modal.dismiss()">Cancel</button>
-          <button type="button" class="btn btn-danger btn-sm" (click)="confirm()">
-              {{ mode === 'wipe' ? 'Yes, erase everything' : 'Yes, reset to demo data' }}
-          </button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="confirm()">Delete Everything</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="reset()">Reset to Default</button>
       </div>
     </div>
   `
@@ -42,14 +32,14 @@ import { JsonService } from '../services/json.service';
 export class WipeModalComponent {
   modal = inject(NgbActiveModal);
   json = inject(JsonService);
-  @Input() mode!: 'wipe' | 'reset';
 
   confirm() {
-    if (this.mode === 'wipe') {
-      this.json.wipeAllData();
-    } else {
-      this.json.reset()
-    }
-    this.modal.close();
+    this.json.wipeAllData();
+    this.modal.dismiss()
+  }
+
+  reset(){
+    this.json.reset()
+    this.modal.dismiss()
   }
 }

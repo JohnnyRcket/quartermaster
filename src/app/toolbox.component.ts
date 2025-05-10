@@ -77,13 +77,6 @@ export class ToolboxComponent {
     }
     this.json.saveToCookies();
   }
-  onDragStarted() {
-    this.hoveredItem = null;
-    const hoveredElement = document.querySelector('tr:hover');
-    if (hoveredElement) {
-      hoveredElement.dispatchEvent(new Event('mouseleave'));
-    }
-  }
 
   onKeyDown(event: KeyboardEvent, field: 'gold' | 'exp'): void {
     const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
@@ -114,8 +107,13 @@ export class ToolboxComponent {
   }
 
   onDragEnded() {
-    //this.tooltips.forEach(t => t.hide());
     this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
   }
+
+
 
 }
