@@ -45,7 +45,7 @@
             (cdkDragEnded)="onDragEnded()"
             cdkDrag
             [cdkDragStartDelay]="{ touch: 200, mouse: 0 }">
-          <td class="bg-info bg-opacity-25">{{ item.name }}</td>
+          <td class="bg-info bg-opacity-25" cdkDragHandle>{{ item.name }}</td>
           <td class="bg-info bg-opacity-25" style="white-space: nowrap;">{{ item.size }}
             <span *ngIf="item.quantity > 1" class="badge bg-secondary badge-quantity" style="font-size: 0.75rem;">(x{{ item.quantity }})</span>
           </td>

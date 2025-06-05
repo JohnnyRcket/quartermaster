@@ -11,7 +11,6 @@ import {Container} from './entities/container';
 import {TooltipComponent} from './tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {JsonService} from './services/json.service';
-import {FaqModalComponent} from './modals/faq-modal.component';
 
 @Component({
     selector: 'app-toolbox',
@@ -115,9 +114,6 @@ export class ToolboxComponent {
     }
   }
 
-  openFAQModal() {
-    const modalRef = this.modalService.open(FaqModalComponent);
-  }
 
 
 }

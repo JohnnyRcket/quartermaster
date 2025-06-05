@@ -18,6 +18,7 @@ import {PortModalComponent} from './modals/port-modal.component';
 import {JsonService} from './services/json.service';
 import {WipeModalComponent} from './modals/wipe-modal.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
+import { ThemeSwitcherComponent } from './theme-switch.component';
 
 
 @Component({
@@ -35,9 +36,7 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
     ToolboxComponent,
     ErrorToastComponent,
     TooltipDirective,
-    NgSwitch,
-    NgSwitchCase,
-    NgClass
+    ThemeSwitcherComponent
   ],
 
 })
@@ -97,6 +96,7 @@ export class MainPageComponent implements OnInit {
     const modalRef = this.modalService.open(ItemModalComponent);
     modalRef.componentInstance.carrier = carrier;
   }
+
 
   onThemeSelect(theme: string): void {
     this.themeService.setTheme(theme);

@@ -63,4 +63,18 @@ body[data-bs-theme="dark"] .modal-content {
   opacity: 1 !important;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
 
+#main-content-box {
+  overflow-x: hidden;
+}
+
+footer .btn {
+  white-space: nowrap;
+  text-align: center;
+  margin: 0 !important;
+}

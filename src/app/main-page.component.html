@@ -1,121 +1,99 @@
-<div [attr.data-bs-theme]="themeService.getCurrentTheme()">
-<div class="container">
-  <!-- Title Section -->
-  <div class="row"> <app-error-toast />
-    <div class="col">
-      <h1 class="text-center text-danger" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-       margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">
+<div [attr.data-bs-theme]="themeService.getCurrentTheme()" class="d-flex flex-column" style="height: 100dvh;">
+  <!-- Header -->
+  <header class="py-1 border-bottom bg-body position-sticky top-0 z-3">
+    <div class="container">
+      <app-error-toast></app-error-toast>
+      <h1 class="text-center text-danger"
+          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">
         Quartermaster
+        <span class="fs-6 align-bottom text-danger ms-2">(BETA)</span>
         <span class="align-bottom text-danger ms-1"
               style="font-size: small"
               [tooltip]="versionTooltip"
               container="body"
               placement="top">
-          v1.0</span>
+          v0.4</span>
       </h1>
       <ng-template #versionTooltip>
         <div class="text-start">
-          <strong>Version 1.0</strong><br>
-          • New icon<br>
+          <strong>Version 0.4</strong><br>
+          • Persistent header/footer<br>
           • Changelog on hover on version number<br>
-          • Consolidated wipe and reset modals<br>
-          • Added FAQ modal<br>
-          • Changed default character and animal names<br>
-          • Tweaked template items to publisher preferences<br>
-          • Updated links<br>
+          • Consolidated wipe and reset into modal<br>
           • Consistency tweaks
         </div>
       </ng-template>
     </div>
-  </div>
-  <!-- dropListGroup start -->
-  <div class="row" cdkDropListGroup>
-    <!-- Characters -->
-    <div class="col-12 col-md-4" id="characterColumn">
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="fancy-header flex-grow-1 text-center">
-          Characters</span>
-            <button class="btn btn-secondary btn-sm"
-              (click)="openCharacterModal()">New</button>
-      </div>
-      <div *ngFor="let character of json.activeInventory.characters; let i = index">
-        <app-carrier [carrier]="character" ></app-carrier>
-      </div>
-    </div>
-    <!-- Animals -->
-    <div class="col-12 col-md-4" id="animalColumn">
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="fancy-header flex-grow-1 text-center">
-          Animals</span>
-            <button class="btn btn-secondary btn-sm"
-                    (click)="openAnimalModal()">New</button>
-      </div>
-      <div *ngFor="let animal of json.activeInventory.animals; let i = index">
-        <app-carrier [carrier]="animal" ></app-carrier>
-      </div>
-    </div>
+  </header>
 
-    <!-- Toolbox -->
-    <div class="col-12 col-md-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="fancy-header flex-grow-1 text-center">Toolbox</span>
-      </div>
-      <div style="position: sticky; top: 1rem; z-index: 10;">
-      <app-toolbox ></app-toolbox>
-      </div>
-    </div>
-  </div>
-</div>
+  <!-- Main Content -->
+  <main class="flex-fill overflow-auto" style="min-height: 0;" >
+    <div class="container py-3 h-100 position-relative" id="main-content-box">
+      <div class="row h-100" cdkDropListGroup>
+        <!-- Characters -->
+        <div class="col-12 col-md-4" id="characterColumn">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fancy-header flex-grow-1 text-center">Characters</span>
+            <button class="btn btn-secondary btn-sm" (click)="openCharacterModal()">New</button>
+          </div>
+          <div *ngFor="let character of json.activeInventory.characters; let i = index">
+            <app-carrier [carrier]="character"></app-carrier>
+          </div>
+        </div>
 
-<footer class="d-xl-flex justify-content-xl-center align-items-xl-end">
-  <div class="row d-xl-flex flex-fill justify-content-xl-center align-items-xl-end">
-    <div class="col-sm-2 col-xl-1 d-xl-flex justify-content-xl-start align-items-xl-end">
-      <div class="theme-switcher dropup d-flex justify-content-start align-items-center">
-        <button class="btn btn-link dropdown-toggle" (click)="testClick()" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="z-index: 2050; margin-left: 50px; color: var(--bs-body-color);">
-          <ng-container [ngSwitch]="currentTheme">
-            <svg *ngSwitchCase="'light'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high me-1" viewBox="0 0 16 16">
-              <path d="M8 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
-              <path d="M8 0a.5.5 0 0 1 .5.5v1.1a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 8 0zm0 13.4a.5.5 0 0 1 .5.5v1.1a.5.5 0 0 1-1 0v-1.1a.5.5 0 0 1 .5-.5zM2.34 2.34a.5.5 0 0 1 .71 0l.78.78a.5.5 0 0 1-.71.71l-.78-.78a.5.5 0 0 1 0-.71zm10.56 10.56a.5.5 0 0 1 .71 0l.78.78a.5.5 0 0 1-.71.71l-.78-.78a.5.5 0 0 1 0-.71zM0 8a.5.5 0 0 1 .5-.5h1.1a.5.5 0 0 1 0 1H.5A.5.5 0 0 1 0 8zm13.4 0a.5.5 0 0 1 .5-.5h1.1a.5.5 0 0 1 0 1h-1.1a.5.5 0 0 1-.5-.5zM2.34 13.66a.5.5 0 0 1 0-.71l.78-.78a.5.5 0 0 1 .71.71l-.78.78a.5.5 0 0 1-.71 0zm10.56-10.56a.5.5 0 0 1 0-.71l.78-.78a.5.5 0 0 1 .71.71l-.78.78a.5.5 0 0 1-.71 0z"/>
-            </svg>
-            <svg *ngSwitchCase="'dark'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars me-1" viewBox="0 0 16 16">
-              <path d="M6 .278a.768.768 0 0 1 .08.858 6.718 6.718 0 0 0-.878 3.27 6.72 6.72 0 0 0 6.72 6.72 6.718 6.718 0 0 0 3.27-.878.768.768 0 0 1 .858.08.75.75 0 0 1 .07.979A8.001 8.001 0 1 1 5.02.207a.75.75 0 0 1 .98.07z"/>
-              <path d="M10.5 2a.5.5 0 0 1 .5.5V3h.5a.5.5 0 0 1 0 1H11v.5a.5.5 0 0 1-1 0V4h-.5a.5.5 0 0 1 0-1H10v-.5a.5.5 0 0 1 .5-.5zM13.5 4a.5.5 0 0 1 .5.5V5h.5a.5.5 0 0 1 0 1H14v.5a.5.5 0 0 1-1 0V6h-.5a.5.5 0 0 1 0-1H13v-.5a.5.5 0 0 1 .5-.5z"/>
-            </svg>
-            <svg *ngSwitchDefault xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half me-1" viewBox="0 0 16 16">
-              <path d="M8 15V1a7 7 0 1 1 0 14z"/>
-            </svg>
-          </ng-container>
-        </button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item d-flex align-items-center" href="#" (click)="onThemeSelect('light')" data-bs-theme-value="light">
-            <svg [ngClass]="{ 'text-danger': currentTheme === 'light', 'opacity-50': currentTheme !== 'light' }" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill opacity-50 me-2">
-              <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
-            </svg>Light</a>
-          <a class="dropdown-item d-flex align-items-center" href="#" (click)="onThemeSelect('dark')" data-bs-theme-value="dark">
-            <svg [ngClass]="{ 'text-danger': currentTheme === 'dark', 'opacity-50': currentTheme !== 'dark' }" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-moon-stars-fill opacity-50 me-2">
-              <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278"></path>
-            </svg>Dark</a>
-          <a class="dropdown-item d-flex align-items-center" href="#" (click)="onThemeSelect('auto')" data-bs-theme-value="auto">
-            <svg [ngClass]="{ 'text-danger': currentTheme === 'auto', 'opacity-50': currentTheme !== 'auto' }" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-half opacity-50 me-2">
-              <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"></path>
-            </svg>Auto</a>
+        <!-- Animals -->
+        <div class="col-12 col-md-4" id="animalColumn">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fancy-header flex-grow-1 text-center">Animals</span>
+            <button class="btn btn-secondary btn-sm" (click)="openAnimalModal()">New</button>
+          </div>
+          <div *ngFor="let animal of json.activeInventory.animals; let i = index">
+            <app-carrier [carrier]="animal"></app-carrier>
+          </div>
+        </div>
+
+        <!-- Toolbox -->
+        <div class="col-12 col-md-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fancy-header flex-grow-1 text-center">Toolbox</span>
+          </div>
+          <div style="position: sticky; top: 1rem; z-index: 10;">
+            <app-toolbox></app-toolbox>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-3 text-center d-flex d-lg-flex justify-content-center align-items-center justify-content-lg-center align-items-lg-center align-items-xl-end">
-      <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openImportModal()">Import...</button>
-      <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openExportModal()">Export...</button>
-      <button class="btn btn-danger btn-sm" type="button" style="margin-left: 25px;" (click)="wipeData()">Clear All</button>
-    </div>
-    <div class="d-flex flex-column align-items-center text-center">
-      <a href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer" style="font-size: 15px;">Buy the developer a coffee</a>
-      <div class="d-inline" style="font-size: 15px;">
-        Ryuutama is published in English by
-        <a href="https://kotohi.com" target="_blank" rel="noopener noreferrer">KOTODAMA HEAVY INDUSTRIES</a>
+  </main>
+
+  <!-- Footer -->
+  <footer class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-between gap-2 px-2 py-2 border-top small bg-body">
+    <div class="container d-flex flex-wrap justify-content-center align-items-center">
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <app-theme-switcher></app-theme-switcher>
+        <button class="btn btn-secondary btn-sm" type="button" (click)="openImportModal()">Import...</button>
+        <button class="btn btn-secondary btn-sm" type="button" (click)="openExportModal()">Export...</button>
+        <button class="btn btn-danger btn-sm" type="button" (click)="wipeData()">Clear All</button>
+      </div>
+
+      <!-- Ko-fi Link with margin on desktop -->
+      <div class="d-flex justify-content-center align-items-center mt-2 mt-sm-0" style="margin-left: 20px;">
+        <a class="text-center" href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer"
+           style="font-size: 15px; white-space: nowrap; flex-shrink: 0;">
+          Ko-fi.com/bizentine
+        </a>
       </div>
     </div>
+  </footer>
 
-  </div>
-</footer>
-<script src="app/bootstrap/js/bootstrap.min.js"></script>
+
+
+
+
+
+
 </div>
+
+
+
+
+

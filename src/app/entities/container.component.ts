@@ -6,7 +6,6 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ItemModalComponent} from '../modals/item-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Carrier} from './carrier';
-import {v4 as uuidv4} from 'uuid';
 import {TooltipComponent} from '../tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {ErrorToastComponent} from '../modals/error-toast.component';
@@ -34,6 +33,8 @@ export class ContainerComponent {
   @ViewChild(ErrorToastComponent) errorToast!: ErrorToastComponent;
   @ViewChildren(TooltipDirective) tooltips!: QueryList<TooltipDirective>;
   hoveredItem: any = null;
+  @Input() scrollContainer: HTMLElement[] = [];
+
   constructor(private modalService: NgbModal, private json: JsonService) {}
 
   ngOnInit(){
