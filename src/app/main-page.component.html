@@ -5,9 +5,27 @@
     <div class="col">
       <h1 class="text-center text-danger" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
        margin-bottom: -1px; font-weight: bold; font-style: italic; text-decoration: underline;">
-        Quartermaster<span class="fs-6 align-bottom text-danger ms-2">(BETA)</span>
-        <span class="align-bottom text-danger ms-1" style="font-size: small">v0.3</span>
+        Quartermaster
+        <span class="align-bottom text-danger ms-1"
+              style="font-size: small"
+              [tooltip]="versionTooltip"
+              container="body"
+              placement="top">
+          v1.0</span>
       </h1>
+      <ng-template #versionTooltip>
+        <div class="text-start">
+          <strong>Version 1.0</strong><br>
+          • New icon<br>
+          • Changelog on hover on version number<br>
+          • Consolidated wipe and reset modals<br>
+          • Added FAQ modal<br>
+          • Changed default character and animal names<br>
+          • Tweaked template items to publisher preferences<br>
+          • Updated links<br>
+          • Consistency tweaks
+        </div>
+      </ng-template>
     </div>
   </div>
   <!-- dropListGroup start -->
@@ -88,9 +106,15 @@
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openImportModal()">Import...</button>
       <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 25px;" (click)="openExportModal()">Export...</button>
       <button class="btn btn-danger btn-sm" type="button" style="margin-left: 25px;" (click)="wipeData()">Clear All</button>
-      <button class="btn btn-outline-danger btn-sm" (click)="reset()" style="margin-left: 25px;">Reset to Default</button>
     </div>
-    <div class="col-xl-2 d-flex d-lg-flex justify-content-center align-items-center align-items-lg-center align-items-xl-end" style="text-align: center;"><a class="d-lg-flex justify-content-lg-center align-items-lg-center" href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer" style="font-size: 15px;">Ko-fi.com/bizentine</a></div>
+    <div class="d-flex flex-column align-items-center text-center">
+      <a href="https://ko-fi.com/bizentine" target="_blank" rel="noopener noreferrer" style="font-size: 15px;">Buy the developer a coffee</a>
+      <div class="d-inline" style="font-size: 15px;">
+        Ryuutama is published in English by
+        <a href="https://kotohi.com" target="_blank" rel="noopener noreferrer">KOTODAMA HEAVY INDUSTRIES</a>
+      </div>
+    </div>
+
   </div>
 </footer>
 <script src="app/bootstrap/js/bootstrap.min.js"></script>

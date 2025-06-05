@@ -21,8 +21,8 @@ const item14 = new Item('Water Pouch', 1, "A pouch of leather that can hold a da
 const container1 = new Container('Backpack', 3, "A backpack.", 5, [item4])
 const container2 = new Container('Chest', 5, "A chest.", 15, [item6])
 
-const carrier1 = new Carrier('Andy', 12, [item1, item2, container1], CarrierType.Character);
-const carrier2 = new Carrier('Ennui', 15, [item11, item12, item13, item14, item5, container2], CarrierType.Animal);
+const carrier1 = new Carrier('Haruka', 12, [item1, item2, container1], CarrierType.Character);
+const carrier2 = new Carrier('Custer', 15, [item11, item12, item13, item14, item5, container2], CarrierType.Animal);
 
 export const EXAMPLE_CARRIERS = [carrier1, carrier2]
 export const EXAMPLE_ITEMS: Item[] = [item1, item2, item3, item7, item8, item9, item10]

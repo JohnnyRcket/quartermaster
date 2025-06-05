@@ -106,6 +106,9 @@ export class CarrierComponent {
   onDragEnded() {
     //this.tooltips.forEach(t => t.hide());
     this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
   }
-
 }

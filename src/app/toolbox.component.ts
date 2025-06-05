@@ -11,6 +11,7 @@ import {Container} from './entities/container';
 import {TooltipComponent} from './tooltips/tooltip.component';
 import {TooltipDirective} from 'ngx-bootstrap/tooltip';
 import {JsonService} from './services/json.service';
+import {FaqModalComponent} from './modals/faq-modal.component';
 
 @Component({
     selector: 'app-toolbox',
@@ -77,13 +78,6 @@ export class ToolboxComponent {
     }
     this.json.saveToCookies();
   }
-  onDragStarted() {
-    this.hoveredItem = null;
-    const hoveredElement = document.querySelector('tr:hover');
-    if (hoveredElement) {
-      hoveredElement.dispatchEvent(new Event('mouseleave'));
-    }
-  }
 
   onKeyDown(event: KeyboardEvent, field: 'gold' | 'exp'): void {
     const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
@@ -114,8 +108,16 @@ export class ToolboxComponent {
   }
 
   onDragEnded() {
-    //this.tooltips.forEach(t => t.hide());
     this.hoveredItem = null;
+    const hoveredElement = document.querySelector('tr:hover');
+    if (hoveredElement) {
+      hoveredElement.dispatchEvent(new Event('mouseleave'));
+    }
   }
+
+  openFAQModal() {
+    const modalRef = this.modalService.open(FaqModalComponent);
+  }
+
 
 }
