@@ -37,7 +37,8 @@ import {TooltipDirective} from 'ngx-bootstrap/tooltip';
     TooltipDirective,
     NgSwitch,
     NgSwitchCase,
-    NgClass
+    NgClass,
+    NgSwitchDefault
   ],
 
 })
