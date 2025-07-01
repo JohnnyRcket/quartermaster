@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
     <div class="modal-content p-3">
       <div class="modal-header justify-content-between m-0 p-0">
         <h5 class="modal-title m-0 p-0">User Guide</h5>
-        <button type="button" class="btn-close m-0 p-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close m-0 p-0" aria-label="Close" (click)="close()"></button>
       </div>
       <div class="modal-body" style="white-space: pre-wrap;">
         <p><strong>Welcome to Quartermaster:<br></strong>A tool for managing a Ryuutama TTRPG party's shared inventory. It is a browser-based webapp where you can save, export, import, and generally (hopefully) not worry about losing stuff between sessions.</p>
@@ -39,5 +39,9 @@ import { CommonModule } from '@angular/common';
   `
 })
 export class FaqModalComponent {
-  constructor(public modal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal) {}
+
+  close() {
+    this.activeModal.close();
+  }
 }
